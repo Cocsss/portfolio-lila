@@ -6,10 +6,10 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  --vert:        #433f30;                 /* le fond, partout */
-  --vert-nuit:   #312e23;                 /* nav, pied, voiles */
-  --vert-jour:   #534e3c;                 /* surfaces légèrement relevées */
-  --jaune:       #feea94;                 /* repris du CV */
+  --vert:        #948b1f;   /* CMJN 0/0/100/45 */                 /* le fond, partout */
+  --vert-nuit:   #6f6817;                 /* nav, pied, voiles */
+  --vert-jour:   #a59c2f;                 /* surfaces légèrement relevées */
+  --jaune:       #ffed00;   /* CMJN 0/0/100/0 */
   --blanc:       #f6f3ea;
   --blanc-70:    rgba(246, 243, 234, .72);
   --blanc-45:    rgba(246, 243, 234, .45);
@@ -107,7 +107,7 @@ a { color: inherit; }
   transition: background .35s ease, padding .35s ease;
 }
 .nav--pose {
-  background: rgba(49, 46, 35, .86);
+  background: rgba(111, 104, 23, .86);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
   padding-block: .7rem;
@@ -150,7 +150,7 @@ a { color: inherit; }
 .nav__bascule[aria-expanded="true"] span:nth-child(2) { transform: translateY(-3.5px) rotate(-45deg); }
 
 @media (max-width: 1180px) {
-  .nav { background: rgba(49, 46, 35, .9); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  .nav { background: rgba(111, 104, 23, .9); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
   .nav__bascule { display: block; order: 3; }
   .nav__contact { order: 2; }
   .nav__liens {
@@ -252,7 +252,7 @@ a { color: inherit; }
 .tuile:hover img, .tuile:focus-visible img { transform: scale(1.06); filter: saturate(1); }
 .tuile::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(49,46,35,.35) 0%, rgba(49,46,35,0) 40%, rgba(49,46,35,.1) 65%, rgba(49,46,35,.92) 100%);
+  background: linear-gradient(180deg, rgba(111,104,23,.35) 0%, rgba(111,104,23,0) 40%, rgba(111,104,23,.1) 65%, rgba(111,104,23,.92) 100%);
 }
 .tuile__num { position: absolute; top: .85rem; left: .9rem; z-index: 2; }
 .tuile__corps {
@@ -393,7 +393,7 @@ a { color: inherit; }
 .clip__son {
   position: absolute; right: .6rem; top: .6rem; z-index: 3;
   width: 34px; aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer; padding: 0;
-  background: rgba(49,46,35,.6); color: var(--blanc);
+  background: rgba(111,104,23,.6); color: var(--blanc);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   display: grid; place-items: center;
   opacity: 0; transition: opacity .25s, background .2s, color .2s;
@@ -403,7 +403,7 @@ a { color: inherit; }
 .clip__duree {
   position: absolute; left: .6rem; bottom: .6rem; z-index: 3;
   font-size: .64rem; font-weight: 600; letter-spacing: .06em; font-variant-numeric: tabular-nums;
-  color: var(--blanc); background: rgba(49,46,35,.6);
+  color: var(--blanc); background: rgba(111,104,23,.6);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   padding: .14rem .4rem; opacity: 0; transition: opacity .25s;
 }
@@ -428,7 +428,7 @@ a { color: inherit; }
 
 /* ═══ LIGHTBOX ════════════════════════════════════════════════════ */
 .boite {
-  position: fixed; inset: 0; z-index: 300; background: rgba(49, 46, 35, .97);
+  position: fixed; inset: 0; z-index: 300; background: rgba(111, 104, 23, .97);
   display: grid; grid-template-rows: auto 1fr auto;
   opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
 }
