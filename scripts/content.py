@@ -194,7 +194,7 @@ RUBRIQUES = [
                     "clients, en voici quelques-uns (vidéos montées sur CapCut "
                     "Pro)."
                 ),
-                "ressources": "6 reels — AKAI sushi, Le Corbier, Gazzosa, Ono, Delhaize Champagne",
+                "ressources": "6 reels : AKAI sushi, Le Corbier, Gazzosa, Ono, Delhaize Champagne",
                 "medias": vid(
                     "reel-akai-sushi", "reel-cocktail-le-corbier",
                     "reel-cuisine-gazzosa", "reel-post-it-ono",

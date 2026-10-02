@@ -97,7 +97,7 @@ def media_html(m, titre_prod, span):
             print(f"   ⚠️  visuel {n} absent — ignoré")
             return ""
         w, h = taille(src)
-        alt = f"{titre_prod} — visuel {n}"
+        alt = f"{titre_prod}, visuel {n}"
         contenir = " vignette--contenir" if famille(w, h) == "banniere" else ""
         large = " large" if span >= 4 else ""
         return (
@@ -316,10 +316,6 @@ def page_rubrique(r, i):
   <header class="rub__tete" aria-label="{e(r['titre'])}">
     <div>
       <h1 class="titre-geant rub__titre">{e(r['titre'])}</h1>
-      <div class="rub__sous">
-        <p class="etq">{compte_medias(r)} contenus</p>
-        <p class="etq">{len(r['productions'])} production{'s' if len(r['productions']) > 1 else ''}</p>
-      </div>
     </div>
   </header>
 

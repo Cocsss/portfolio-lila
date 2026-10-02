@@ -155,7 +155,7 @@
     img.alt = el.dataset.alt || '';
     scene.appendChild(img);
     compte.textContent = `${String(i + 1).padStart(2, '0')} / ${String(lot.length).padStart(2, '0')}`;
-    legende.textContent = el.dataset.alt || '';
+    legende.textContent = (el.dataset.alt || '').replace(/, visuel \d+$/, '');
     prec.hidden = suiv.hidden = lot.length < 2;
     [i - 1, i + 1].forEach(k => {
       const v = lot[(k + lot.length) % lot.length];
