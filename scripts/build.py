@@ -245,7 +245,9 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 </main>
 
 <footer class="pied">
-  <p class="pied__nom">{e(I['nom'])}</p>
+  <a class="pied__nom" href="#contenu">{e(I['nom'])}
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </a>
   <p class="pied__coord">
     <a href="mailto:{e(I['email'])}">{e(I['email'])}</a>
     <a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a>{('<a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">LinkedIn</a>') if I.get('linkedin') else ''}

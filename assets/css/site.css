@@ -221,12 +221,12 @@ a { color: inherit; }
   padding: var(--haut-page) var(--marge) clamp(1.5rem, 3vw, 3rem);
 }
 .hero__nom {
-  font-size: clamp(3.2rem, 16vw, 320px);  /* « Lila Narinx » ≈ 5,5 em en Archivo 800 wdth 112 */
+  font-size: clamp(2.8rem, 13.5vw, 270px);
   color: var(--jaune);
 }
 .hero__nom span { display: inline; }
 @media (max-width: 700px) {
-  .hero__nom { font-size: 26.5vw; }
+  .hero__nom { font-size: 23vw; }
   .hero__nom span { display: block; }
 }
 .hero__bas {
@@ -337,7 +337,13 @@ a { color: inherit; }
   font-family: var(--display); font-weight: 800; font-variation-settings: "wdth" 110;
   font-size: clamp(1.3rem, 2.4vw, 2rem); letter-spacing: -.04em; line-height: 1;
   color: var(--jaune); margin: 0;
+  display: inline-flex; align-items: center; gap: .55rem;
+  text-decoration: none;
+  transition: color var(--t-vif) var(--c-doux);
 }
+.pied__nom svg { transition: transform var(--t-base) var(--c-sortie); }
+.pied__nom:hover { color: var(--blanc); }
+.pied__nom:hover svg { transform: translateY(-3px); }
 .pied__coord {
   margin: 0; display: flex; flex-wrap: wrap; gap: .4rem 2.2rem;
   font-family: var(--display); font-weight: 600;
