@@ -33,7 +33,7 @@ versions web optimisées et validées iront dans `assets/`.
 ## Vidéos — `media/videos/`
 
 Elles ne peuvent pas aller sur GitHub (100 Mo max/fichier) → **Cloudflare R2**,
-servies depuis `https://videos.lilanarinx.com/`.
+servies depuis `https://videos.corentindeville.com/Lila/`.
 
 | Fichier | Poids | Sujet |
 |---|---|---|

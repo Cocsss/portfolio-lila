@@ -15,7 +15,12 @@
      La bascule est automatique : rien à changer à la mise en ligne.
      ───────────────────────────────────────────────────────────────── */
   const EN_LOCAL = ['localhost', '127.0.0.1', ''].includes(location.hostname);
-  const BASE_VIDEO = EN_LOCAL ? 'assets/video/' : 'https://videos.lilanarinx.com/';
+  /* Les vidéos vivent dans le bucket R2 « cd-videos », dossier Lila/.
+     Pour les déplacer vers un bucket propre à lilanarinx.com plus tard,
+     cette seule ligne est à changer. */
+  const BASE_VIDEO = EN_LOCAL
+    ? 'assets/video/'
+    : 'https://videos.corentindeville.com/Lila/';
   const url = v => BASE_VIDEO + v.dataset.f + '.mp4';
 
   /* ─────────────────────────────────────────────────────────────────

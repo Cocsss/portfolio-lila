@@ -55,7 +55,7 @@ Les vidéos ne peuvent pas aller sur GitHub (100 Mo max par fichier).
 ### Uploader
 1. Bucket → **Objects** → **Upload** → drag & drop les `.mp4`
 2. Chaque fichier est alors dispo à
-   `https://videos.lilanarinx.com/nomdufichier.mp4`
+   `https://videos.corentindeville.com/Lila/nomdufichier.mp4`
 
 **Nommage** : minuscules, sans espaces ni accents.
 `reel-akai-sushi.mp4`, `apero-final.mp4`, `projet-spear.mp4`…
@@ -74,7 +74,7 @@ ffmpeg -i "Reel cocktail Le Corbier.mov" -vcodec libx264 -crf 23 \
 ```html
 <video class="reel" autoplay muted loop playsinline preload="metadata"
        poster="assets/reel-akai-poster.jpg">
-  <source src="https://videos.lilanarinx.com/reel-akai-sushi.mp4" type="video/mp4">
+  <source src="https://videos.corentindeville.com/Lila/reel-akai-sushi.mp4" type="video/mp4">
 </video>
 ```
 
