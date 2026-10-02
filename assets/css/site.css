@@ -165,7 +165,13 @@ a { color: inherit; }
 .nav__bascule[aria-expanded="true"] span:nth-child(2) { transform: translateY(-3.5px) rotate(-45deg); }
 
 @media (max-width: 1180px) {
-  .nav { background: rgb(var(--vert-rvb) / .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  /* PAS de backdrop-filter ici : il crée un bloc conteneur, et le panneau
+     en position:fixed se calerait sur la barre (144 px) au lieu de l'écran.
+     Le menu étant opaque, le flou n'apporte plus rien en mobile. */
+  .nav, .nav--pose {
+    background: rgb(var(--vert-rvb) / .96);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
   .nav__bascule { display: block; order: 3; }
   .nav__contact { display: none; }
 
