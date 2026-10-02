@@ -172,6 +172,10 @@ a { color: inherit; }
     background: rgb(var(--vert-rvb) / .96);
     -webkit-backdrop-filter: none; backdrop-filter: none;
   }
+  /* menu ouvert : la barre s'efface, le panneau jaune passe dessous */
+  .nav--ouverte, .nav--ouverte.nav--pose { background: transparent; }
+  .nav--ouverte .nav__marque { color: var(--vert); }
+  .nav--ouverte .nav__bascule span { background: var(--vert); }
   .nav__bascule { display: block; order: 3; }
   .nav__contact { display: none; }
 
@@ -186,8 +190,8 @@ a { color: inherit; }
     display: flex; flex-direction: column; justify-content: center;
     gap: 0;
     padding: 6rem var(--marge) 3rem;
-    /* opaque : aucun flou, le texte ne dépend plus de ce qu'il y a derrière */
-    background: var(--vert);
+    /* inversé : fond jaune, texte olive */
+    background: var(--jaune);
     -webkit-backdrop-filter: none; backdrop-filter: none;
     overflow-y: auto; overscroll-behavior: contain;
     opacity: 0; visibility: hidden; transform: translateY(-10px);
@@ -206,13 +210,13 @@ a { color: inherit; }
     font-family: var(--display); font-weight: 700;
     font-size: clamp(1.45rem, 6.4vw, 2.3rem);
     letter-spacing: -.03em; text-transform: none;
-    color: var(--blanc);
+    color: var(--vert);
     padding: .75rem 0;
-    border-bottom: 1px solid var(--trait);
+    border-bottom: 1px solid rgb(var(--vert-rvb) / .22);
   }
   .nav__liens a:last-child { border-bottom: 0; }
-  .nav__liens a:hover { color: var(--jaune); }
-  .nav__liens a[aria-current="page"] { color: var(--jaune); }
+  .nav__liens a:hover { opacity: .6; }
+  .nav__liens a[aria-current="page"] { color: var(--vert); border-bottom-width: 3px; border-bottom-color: var(--vert); }
 }
 /* en paysage, tout doit tenir */
 @media (max-width: 1180px) and (max-height: 560px) {
