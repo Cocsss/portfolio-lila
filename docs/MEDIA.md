@@ -1,7 +1,6 @@
 # Index des médias
 
-Correspondance entre la numérotation du brief (`_sources/brief/construction
-portfolio.docx`) et les fichiers rangés dans `media/`.
+Correspondance entre la numérotation du brief (`_sources/brief/construction portfolio.docx`) et les fichiers rangés dans `media/`.
 
 ⚠️ `media/` et `_sources/` sont **gitignorés** (~2 Go, confidentialité
 Takeaway, données personnelles du CV). Ils restent sur le Mac. Seules les
@@ -50,13 +49,12 @@ servies depuis `https://videos.lilanarinx.com/`.
 | `erasmus-pub/pub-erasmus-1.mp4` | 12 Mo | Pub — cours « Audiovisual, Technology and Communication » (Erasmus) |
 | `erasmus-pub/pub-erasmus-2.mp4` | 11 Mo | Pub — idem |
 
-Total vidéos : **849 Mo** → à compresser avant R2 (voir `DEPLOY.md`, section
-ffmpeg). Les reels Tribe Agency sont montés sur CapCut Pro, le reste sur
+Total vidéos : **849 Mo** → à compresser avant R2 (voir `docs/DEPLOY.md`, section ffmpeg). Les reels Tribe Agency sont montés sur CapCut Pro, le reste sur
 Premiere Pro.
 
 ## À faire avant d'intégrer
 
-1. **Compresser les vidéos** en `.mp4` H.264 (les `.mov` surtout) → `DEPLOY.md`
+1. **Compresser les vidéos** en `.mp4` H.264 (les `.mov` surtout) → `docs/DEPLOY.md`
 2. **Valider la confidentialité** des visuels Takeaway (1→8, 56→60) : le brief
    demande de ne pas les diffuser. Soit on les écarte du site public, soit on
    les met derrière une page protégée, soit Lila obtient l'accord.

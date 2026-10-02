@@ -15,7 +15,7 @@ Live : https://lilanarinx.com
 ## État actuel
 
 `index.html` est une **page d'attente**. Le portfolio complet est à construire
-à partir du brief (`construction portfolio.docx`, gardé en local) qui décrit
+à partir du brief (`_sources/brief/construction portfolio.docx`, gardé en local) qui décrit
 8 sections et 76 contenus :
 
 | Section | Contenus |
@@ -53,32 +53,35 @@ Aucune iframe, aucun player tiers, aucune pub.
 
 ## Structure
 
+Racine volontairement nue : **que des dossiers**, sauf les deux fichiers qui
+doivent y rester (`index.html` est la page servie par Cloudflare Pages dont
+l'output directory est `/` ; `README.md` est la page d'accueil du repo GitHub).
+
 ```
 .
-├── index.html          Site (page d'attente pour l'instant)
-├── assets/             Images web optimisées — VERSIONNÉ
+├── index.html          Le site — doit rester à la racine (Pages)
+├── README.md           Cette page — doit rester à la racine (GitHub)
+│
+├── assets/             Images web optimisées — SEUL dossier média versionné
+├── docs/               DEPLOY.md · PUSH.md · MEDIA.md
+├── scripts/            PUSH.command (double-clic Finder)
 │
 ├── media/              ⛔ gitignoré (~985 Mo) — reste sur le Mac
 │   ├── photos/         76 visuels du brief, rangés par section
 │   └── videos/         11 vidéos → vont sur Cloudflare R2
 │
-├── _sources/           ⛔ gitignoré (~993 Mo) — reste sur le Mac
-│   ├── brief/          construction portfolio.docx
-│   ├── images-vrac/    6 jpegs à trier
-│   ├── CV Lila Narinx.pdf
-│   └── wetransfer_….zip
-│
-├── MEDIA.md            Index : n° du brief → fichier
-├── PUSH.md             Mettre le site à jour
-├── DEPLOY.md           Mise en place Cloudflare Pages + R2
-└── README.md
+└── _sources/           ⛔ gitignoré (~993 Mo) — reste sur le Mac
+    ├── brief/          le docx de départ
+    ├── images-vrac/    6 jpegs à trier
+    ├── CV Lila Narinx.pdf
+    └── wetransfer_….zip
 ```
 
-Le détail de chaque dossier `media/` est dans **`MEDIA.md`**.
+Le détail de chaque dossier `media/` est dans **`docs/MEDIA.md`**.
 
 ## Mise à jour
 
-Voir `PUSH.md`. En résumé :
+Voir `docs/PUSH.md`. En résumé :
 
 ```bash
 git add -A && git commit -m "message" && git push origin main

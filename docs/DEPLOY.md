@@ -88,7 +88,7 @@ git add -A && git commit -m "branche vidéos R2" && git push origin main
 
 ## Workflow pour la suite
 
-Voir `PUSH.md`. Chaque `git push origin main` redéploie le site.
+Voir `docs/PUSH.md`. Chaque `git push origin main` redéploie le site.
 
 ---
 

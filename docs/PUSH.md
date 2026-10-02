@@ -11,7 +11,7 @@ git push origin main
 Une fois `git push origin main` lancé, **Cloudflare Pages rebuild le site
 automatiquement** (~1-2 minutes) et lilanarinx.com est à jour.
 
-Ou plus simple : **double-clique `PUSH.command`** dans le Finder.
+Ou plus simple : **double-clique `scripts/PUSH.command`** dans le Finder.
 
 ---
 

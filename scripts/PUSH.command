@@ -1,8 +1,9 @@
 #!/bin/bash
 # Double-clique ce fichier dans Finder pour pousser le site sur GitHub.
+# Il remonte tout seul à la racine du repo (il vit dans scripts/).
 # Cloudflare Pages rebuild auto → lilanarinx.com mis à jour ~1-2 min.
 
-cd "$(dirname "$0")" || exit 1
+cd "$(dirname "$0")/.." || exit 1
 
 clear
 echo "═══════════════════════════════════════════"
