@@ -220,9 +220,10 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 
 <footer class="pied">
   <p class="pied__nom">{e(I['nom'])}</p>
-  <a class="pied__bouton" href="contact.html">Me contacter
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-  </a>
+  <p class="pied__coord">
+    <a href="mailto:{e(I['email'])}">{e(I['email'])}</a>
+    <a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a>{('<a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">LinkedIn</a>') if I.get('linkedin') else ''}
+  </p>
 </footer>
 
 <div class="boite" role="dialog" aria-modal="true" aria-label="Visionneuse" aria-hidden="true">
