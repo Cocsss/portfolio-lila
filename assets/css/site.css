@@ -296,12 +296,25 @@ a { color: inherit; }
 .fiche__liste a:hover { color: var(--jaune); }
 
 .pied {
-  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-  padding: 1.4rem var(--marge); background: var(--vert-nuit);
-  font-size: .72rem; color: var(--blanc-45);
+  display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+  padding: clamp(2.2rem, 5vw, 4rem) var(--marge); background: var(--vert-nuit);
 }
-.pied a { color: var(--blanc-70); text-decoration: none; }
-.pied a:hover { color: var(--jaune); }
+.pied__nom {
+  font-family: var(--display); font-weight: 800; font-variation-settings: "wdth" 110;
+  font-size: clamp(1.6rem, 3.4vw, 2.8rem); letter-spacing: -.04em; line-height: 1;
+  color: var(--jaune); margin: .5rem 0 0;
+}
+.pied__bouton {
+  display: inline-flex; align-items: center; gap: .7rem;
+  font-family: var(--display); font-weight: 700; font-size: clamp(1rem, 1.4vw, 1.2rem);
+  letter-spacing: -.01em; text-decoration: none;
+  color: var(--vert-nuit); background: var(--jaune);
+  padding: 1rem 1.6rem; border-radius: 999px;
+  transition: transform .2s, background .2s;
+}
+.pied__bouton:hover { transform: translateY(-2px); background: var(--blanc); }
+.pied__bouton svg { transition: transform .25s; }
+.pied__bouton:hover svg { transform: translateX(4px); }
 
 /* ═══ PAGE DE RUBRIQUE : titre à gauche, photo en bloc à droite ═════ */
 .rub__tete {

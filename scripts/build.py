@@ -219,8 +219,13 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 </main>
 
 <footer class="pied">
-  <p>© <span id="an">2026</span> {e(I['nom'])}</p>
-  <p><a href="index.html">Accueil</a></p>
+  <div class="pied__texte">
+    <p class="etq">Contact</p>
+    <p class="pied__nom">{e(I['nom'])}</p>
+  </div>
+  <a class="pied__bouton" href="contact.html">Me contacter
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
 </footer>
 
 <div class="boite" role="dialog" aria-modal="true" aria-label="Visionneuse" aria-hidden="true">
@@ -234,7 +239,6 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
   <button class="boite__fleche boite__fleche--suiv" type="button" aria-label="Visuel suivant"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
 </div>
 
-<script>document.getElementById('an').textContent=new Date().getFullYear()</script>
 <script src="assets/js/site.js" defer></script>
 </body>
 </html>
