@@ -165,37 +165,50 @@ a { color: inherit; }
 .nav__bascule[aria-expanded="true"] span:nth-child(2) { transform: translateY(-3.5px) rotate(-45deg); }
 
 @media (max-width: 1180px) {
-  .nav { background: rgb(var(--vert-rvb) / .9); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  .nav { background: rgb(var(--vert-rvb) / .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
   .nav__bascule { display: block; order: 3; }
-  .nav__contact { order: 2; }
-  /* `grid-template-rows: 0fr` ne dimensionnait QUE la 1re des 9 rangées :
-     la barre fermée mesurait 521 px et capturait les clics du 1er écran.
-     Un max-height en rem (pas en unité de viewport : dans une propriété
-     transitionnée, il se résout à 0) referme réellement le tiroir. */
+  .nav__contact { display: none; }
+
+  /* marque et bouton restent au-dessus du panneau */
+  .nav__marque, .nav__bascule { position: relative; z-index: 2; }
+
+  /* Menu PLEIN ÉCRAN, fond OPAQUE et sans flou : le flou laissait
+     transparaître la page et rendait les entrées illisibles. */
   .nav__liens {
-    order: 4; width: 100%;
-    display: block;
-    max-height: 0; overflow: hidden;
-    visibility: hidden;                  /* sinon les liens restent tabulables */
-    transition: max-height var(--t-ample) var(--c-sortie),
-                visibility 0s var(--t-ample);
+    position: fixed; inset: 0; z-index: 1;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 0;
+    padding: 6rem var(--marge) 3rem;
+    background: var(--vert);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    overflow-y: auto; overscroll-behavior: contain;
+    opacity: 0; visibility: hidden; transform: translateY(-10px);
+    transition: opacity var(--t-base) var(--c-doux),
+                transform var(--t-base) var(--c-sortie),
+                visibility 0s var(--t-base);
   }
-  .nav--ouverte { max-height: 100svh; overflow-y: auto; overscroll-behavior: contain; }
   .nav--ouverte .nav__liens {
-    max-height: 40rem; visibility: visible;
-    transition: max-height var(--t-ample) var(--c-sortie), visibility 0s;
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity var(--t-base) var(--c-doux),
+                transform var(--t-base) var(--c-sortie),
+                visibility 0s;
   }
   .nav__liens a {
     display: block;
-    padding: .9rem 0; border-bottom: 1px solid var(--trait);
-    font-size: .85rem;
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(1.45rem, 6.4vw, 2.3rem);
+    letter-spacing: -.03em; text-transform: none;
+    color: var(--blanc);
+    padding: .5rem 0; border-bottom: 0;
   }
+  .nav__liens a:hover { color: var(--jaune); }
+  .nav__liens a[aria-current="page"] { color: var(--jaune); border-bottom: 0; }
 }
-/* en paysage, les 9 entrées doivent tenir */
+/* en paysage, tout doit tenir */
 @media (max-width: 1180px) and (max-height: 560px) {
-  .nav__liens a { padding: .45rem 0; font-size: .8rem; }
+  .nav__liens { padding-top: 4.5rem; justify-content: flex-start; }
+  .nav__liens a { font-size: 1.15rem; padding: .3rem 0; }
 }
-@media (max-width: 1180px) { .nav__contact { display: none; } }
 
 /* ═══ HERO (accueil) : nom sur le vert, bande d'images dessous ═══ */
 .hero {
