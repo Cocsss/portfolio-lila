@@ -11,6 +11,7 @@ Produit :
 
 Textes : scripts/content.py · style : assets/css/site.css · JS : assets/js/site.js
 """
+import hashlib
 import html
 import os
 import sys
@@ -38,6 +39,18 @@ COUVERTURES = {
     "graphisme": IMG / "61.webp",
     "intelligence-artificielle": IMG / "71.webp",
 }
+
+def empreinte(chemin):
+    """8 caractères tirés du contenu du fichier — sert de numéro de version
+    dans l'URL (?v=…) pour que navigateurs et CDN rechargent après une modif."""
+    try:
+        return hashlib.md5(Path(chemin).read_bytes()).hexdigest()[:8]
+    except Exception:
+        return "0"
+
+
+V_CSS = empreinte("assets/css/site.css")
+V_JS = empreinte("assets/js/site.js")
 
 _tailles = {}
 
@@ -200,7 +213,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v={V_CSS}">
 </head>
 <body class="{classe}">
 
@@ -236,7 +249,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
   <button class="boite__fleche boite__fleche--suiv" type="button" aria-label="Visuel suivant"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
 </div>
 
-<script src="assets/js/site.js" defer></script>
+<script src="assets/js/site.js?v={V_JS}" defer></script>
 </body>
 </html>
 """
