@@ -7,27 +7,34 @@ Live : https://lilanarinx.com
 
 ## Stack
 
-- **Site** : `index.html` (vanilla HTML/CSS/JS, zéro dépendance)
-- **Hébergement site** : Cloudflare Pages (gratuit, bande passante illimitée)
-- **Hébergement vidéo** : Cloudflare R2 (10 Go gratuits, egress gratuit)
+- **Site** : HTML/CSS/JS vanilla, zéro dépendance, **généré** par `scripts/build.py`
+- **Hébergement site** : Cloudflare Pages (gratuit)
+- **Hébergement vidéo** : Cloudflare R2 (`videos.lilanarinx.com`) — bascule
+  automatique local → R2 dans `assets/js/site.js`
 - **Domaine** : Cloudflare (déjà sur le compte)
 
-## État actuel
+## Comment modifier le site
 
-`index.html` est une **page d'attente**. Le portfolio complet est à construire
-à partir du brief (`_sources/brief/construction portfolio.docx`, gardé en local) qui décrit
-8 sections et 76 contenus :
+| Je veux… | Je touche à… | Puis |
+|---|---|---|
+| changer un texte | `scripts/content.py` (transcrit le docx) | `python3 scripts/build.py` |
+| changer le style | `assets/css/site.css` | rien, c'est direct |
+| changer un comportement | `assets/js/site.js` | rien |
+| ajouter / remplacer un visuel | `media/photos/<rubrique>/<n>.png` | `python3 scripts/optimize-images.py && python3 scripts/build.py` |
+| ajouter une vidéo | `media/videos/…` + une ligne dans `scripts/optimize-videos.sh` et `scripts/posters.sh` | lancer les deux scripts, uploader le `.mp4` sur R2, build |
+| changer la couverture d'une page | `COUVERTURES` dans `scripts/build.py` | build |
 
-| Section | Contenus |
-|---|---|
-| Campagne 360° — RP Takeaway.com (IHECS) | 1 à 8 |
-| Réseaux sociaux — Tribe Agency, Voyage Brazil Selection, CAERUS, Venthone | 9 à 32 |
-| Sites web — Miège, Veyras | 33 à 38 |
-| Photo — Tribe Agency, Vendredi Apér0% | 39 à 49 |
-| Rédaction — newsletters presse, blog, communiqués | 50 à 55 |
-| Graphisme — affiches Takeaway, dossiers InDesign, pochette CD, flyers, logo | 56 à 68 |
-| Intelligence artificielle — projet Cléopâtre influenceuse | 69 à 74 |
-| Vidéo — +50 reels Tribe Agency, Vendredi Apér0%, reportage SPEAR, pubs Erasmus | 75 à 76 + reels |
+Ne jamais éditer les `.html` à la main : ils sont écrasés à chaque build.
+
+Tester en local : `python3 -m http.server 4321` puis http://localhost:4321
+
+## Design
+
+Règle : **fond vert, textes blancs ou jaunes**. Le jaune `#feea94` vient du CV.
+Pages : `index.html` (accueil : hero photo, présentation, index des 8
+rubriques, contact) + une page par rubrique (couverture + titre qui chevauche
+la photo, puis chaque production = texte collant à gauche / collage d'images
+à droite, vidéos en lecture auto muette).
 
 ## ⚠️ Confidentialité
 
