@@ -303,10 +303,19 @@ def accueil():
   </section>
 
   <section class="bloc contact" id="contact" aria-label="Contact">
-    <div class="dedans monte">
-      <p class="etq">Contact</p>
-      <a class="titre-geant contact__mail" href="mailto:{e(I['email'])}">{e(I['email'])}</a>
-      <p class="contact__ligne"><a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a>{('<a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">LinkedIn</a>') if I.get('linkedin') else ''}</p>
+    <div class="dedans">
+      <div class="fiche monte">
+        <div class="fiche__tete">
+          <p class="etq">Contact</p>
+          <p class="fiche__nom">{e(I['nom'])}</p>
+          <p class="fiche__role">{e(I['role'])}</p>
+        </div>
+        <dl class="fiche__liste">
+          <div><dt>Email</dt><dd><a href="mailto:{e(I['email'])}">{e(I['email'])}</a></dd></div>
+          <div><dt>Téléphone</dt><dd><a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a></dd></div>
+          {('<div><dt>LinkedIn</dt><dd><a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">Voir le profil</a></dd></div>') if I.get('linkedin') else ''}
+        </dl>
+      </div>
     </div>
   </section>
 """
