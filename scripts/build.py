@@ -315,10 +315,6 @@ def page_rubrique(r, i):
     corps = f"""
   <header class="rub__tete" aria-label="{e(r['titre'])}">
     <div>
-      <div class="rub__haut">
-        <p class="etq">{i + 1:02d} / {n:02d}</p>
-        <a class="etq" href="index.html#productions">{e(C.TITRE_PRODUCTIONS)}</a>
-      </div>
       <h1 class="titre-geant rub__titre">{e(r['titre'])}</h1>
       <div class="rub__sous">
         <p class="etq">{compte_medias(r)} contenus</p>
