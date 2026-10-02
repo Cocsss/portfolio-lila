@@ -273,6 +273,8 @@ a { color: inherit; }
 
 /* ═══ CONTACT : une fiche ═════════════════════════════════════════ */
 .contact { border-top: 1px solid var(--trait); }
+.contact--page { border-top: 0; min-height: 100svh; display: grid; align-content: center; padding-top: calc(var(--marge) + 5rem); }
+@media (min-width: 1181px) { .nav__lien-contact { display: none; } }
 .fiche {
   background: var(--vert-jour);
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

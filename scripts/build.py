@@ -182,6 +182,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
     liens = "".join(
         f'<a href="{page_de(r)}"' + (' aria-current="page"' if r["id"] == actif else "")
         + f'>{e(r["titre"])}</a>' for r in C.RUBRIQUES)
+    liens += f'<a class="nav__lien-contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>'
     return f"""<!doctype html>
 <html lang="fr">
 <head>
@@ -209,7 +210,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <nav class="nav" aria-label="Navigation principale">
   <a class="nav__marque" href="index.html">{e(I['nom'])}</a>
   <div class="nav__liens">{liens}</div>
-  <a class="nav__contact" href="index.html#contact">Contact</a>
+  <a class="nav__contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>
   <button class="nav__bascule" type="button" aria-expanded="false" aria-label="Ouvrir le menu"><span></span><span></span></button>
 </nav>
 
@@ -301,22 +302,6 @@ def accueil():
     </div>
   </section>
 
-  <section class="bloc contact" id="contact" aria-label="Contact">
-    <div class="dedans">
-      <div class="fiche monte">
-        <div class="fiche__tete">
-          <p class="etq">Contact</p>
-          <p class="fiche__nom">{e(I['nom'])}</p>
-          <p class="fiche__role">{e(I['role'])}</p>
-        </div>
-        <dl class="fiche__liste">
-          <div><dt>Email</dt><dd><a href="mailto:{e(I['email'])}">{e(I['email'])}</a></dd></div>
-          <div><dt>Téléphone</dt><dd><a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a></dd></div>
-          {('<div><dt>LinkedIn</dt><dd><a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">Voir le profil</a></dd></div>') if I.get('linkedin') else ''}
-        </dl>
-      </div>
-    </div>
-  </section>
 """
     return coquille(f"{I['nom']} — Portfolio",
                     f"Portfolio de {I['nom']} : {I['role'].lower()}.",
@@ -355,6 +340,30 @@ def page_rubrique(r, i):
                     actif=r["id"], classe="page-rubrique")
 
 
+def page_contact():
+    I = C.IDENTITE
+    corps = f"""
+  <section class="bloc contact contact--page" aria-label="Contact">
+    <div class="dedans">
+      <div class="fiche monte">
+        <div class="fiche__tete">
+          <p class="etq">Contact</p>
+          <p class="fiche__nom">{e(I['nom'])}</p>
+          <p class="fiche__role">{e(I['role'])}</p>
+        </div>
+        <dl class="fiche__liste">
+          <div><dt>Email</dt><dd><a href="mailto:{e(I['email'])}">{e(I['email'])}</a></dd></div>
+          <div><dt>Téléphone</dt><dd><a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a></dd></div>
+          {('<div><dt>LinkedIn</dt><dd><a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">Voir le profil</a></dd></div>') if I.get('linkedin') else ''}
+        </dl>
+      </div>
+    </div>
+  </section>
+"""
+    return coquille(f"Contact — {I['nom']}", f"Contacter {I['nom']}.", corps,
+                    actif="contact", classe="page-contact")
+
+
 def page_404():
     corps = """
   <section class="bloc" style="min-height:100svh;display:grid;align-content:center">
@@ -369,7 +378,7 @@ def page_404():
 
 
 if __name__ == "__main__":
-    pages = {"index.html": accueil(), "404.html": page_404()}
+    pages = {"index.html": accueil(), "contact.html": page_contact(), "404.html": page_404()}
     for i, r in enumerate(C.RUBRIQUES):
         pages[page_de(r)] = page_rubrique(r, i)
     tv = tc = 0
