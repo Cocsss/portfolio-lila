@@ -1,0 +1,12 @@
+# Configuration pour le déploiement « Workers » de Cloudflare.
+# Le site est 100 % statique : aucun code serveur, on sert simplement
+# les fichiers du dépôt. (Le parcours « Pages » n'a pas besoin de ce
+# fichier — il est ignoré dans ce cas, on peut le laisser.)
+
+name = "portfolio-lila"
+compatibility_date = "2026-10-02"
+
+[assets]
+directory = "./"
+# une URL inconnue affiche notre page 404 maison
+not_found_handling = "404-page"
