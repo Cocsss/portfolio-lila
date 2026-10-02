@@ -273,7 +273,6 @@ def accueil():
       <h1 class="titre-geant hero__nom"><span>Lila</span> <span>Narinx</span></h1>
       <div class="hero__bas">
         <p class="hero__role">{e(I['role'])}</p>
-        <p class="etq">Portfolio</p>
       </div>
     </div>
   </section>
