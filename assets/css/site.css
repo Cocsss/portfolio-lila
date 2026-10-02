@@ -178,19 +178,17 @@ a { color: inherit; }
   /* marque et bouton restent au-dessus du panneau */
   .nav__marque, .nav__bascule { position: relative; z-index: 2; }
 
-  /* Menu PLEIN ÉCRAN, fond OPAQUE et sans flou : le flou laissait
-     transparaître la page et rendait les entrées illisibles. */
+  /* Menu PLEIN ÉCRAN, fond opaque. Le backdrop-filter reste interdit sur
+     .nav : il créerait un bloc conteneur et le panneau fixed se calerait
+     sur la barre au lieu de l'écran. */
   .nav__liens {
     position: fixed; inset: 0; z-index: 1;
     display: flex; flex-direction: column; justify-content: center;
     gap: 0;
     padding: 6rem var(--marge) 3rem;
-    /* aspect vitré posé sur le PANNEAU, pas sur la barre : sur la barre,
-       le backdrop-filter créait un bloc conteneur et le panneau fixed se
-       calait sur elle. .90 garde le texte à 5,2:1 même sur fond blanc. */
-    background: rgb(var(--vert-rvb) / .90);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
-    backdrop-filter: blur(24px) saturate(150%);
+    /* opaque : aucun flou, le texte ne dépend plus de ce qu'il y a derrière */
+    background: var(--vert);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
     overflow-y: auto; overscroll-behavior: contain;
     opacity: 0; visibility: hidden; transform: translateY(-10px);
     transition: opacity var(--t-base) var(--c-doux),
