@@ -152,7 +152,6 @@ def collage_html(medias, titre_prod):
 def production_html(p, i):
     g = [f'<section class="prod" aria-labelledby="p{i}">',
          '<div class="prod__texte monte">',
-         f'<p class="etq">{i + 1:02d}</p>',
          f'<h2 class="prod__titre" id="p{i}">{e(p["titre"])}</h2>']
     for cle in ("texte", "texte2"):
         if p.get(cle):
@@ -265,7 +264,6 @@ def accueil():
     tuiles = "".join(
         f'<a class="tuile monte" href="{page_de(r)}">'
         + img_tag(COUVERTURES[r["id"]], r["titre"], loading="lazy", decoding="async")
-        + f'<p class="etq tuile__num">{i + 1:02d}</p>'
         f'<span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span>'
         f'<span class="tuile__compte">{compte_medias(r)} contenus</span></span></a>'
         for i, r in enumerate(C.RUBRIQUES))
@@ -297,7 +295,6 @@ def accueil():
     <div class="dedans">
       <div class="index__tete monte">
         <p class="etq">{e(C.TITRE_PRODUCTIONS)}</p>
-        <p class="etq">{len(C.RUBRIQUES):02d} rubriques</p>
       </div>
       <div class="index">{tuiles}</div>
     </div>

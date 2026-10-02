@@ -254,7 +254,6 @@ a { color: inherit; }
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(55,19,82,.35) 0%, rgba(55,19,82,0) 40%, rgba(55,19,82,.1) 65%, rgba(55,19,82,.92) 100%);
 }
-.tuile__num { position: absolute; top: .85rem; left: .9rem; z-index: 2; }
 .tuile__corps {
   position: absolute; left: .9rem; right: .9rem; bottom: .85rem; z-index: 2;
   display: flex; flex-direction: column; align-items: flex-start; gap: .35rem;
