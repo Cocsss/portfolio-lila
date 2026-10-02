@@ -25,11 +25,11 @@ IDENTITE = {
 PRESENTATION = {
     "titre": "Présentation générale",
     "texte": (
-        "Je m’appelle Lila Narinx et j'ai toujours été animée par la création "
+        "Je m’appelle Lila Narinx et j’ai toujours été animée par la création "
         "que ce soit à travers le graphisme, la photographie, la vidéo, ou "
         "encore la rédaction. Aujourd’hui diplômée en Relations Publiques "
         "(IHECS) et Marketing (ICHEC), je me spécialise en social media et "
-        "création de contenu. J'aime combiner réflexion stratégique, concepts "
+        "création de contenu. J’aime combiner réflexion stratégique, concepts "
         "créatifs et production de contenus pour construire des univers de "
         "marque cohérents et engageants."
     ),
@@ -49,7 +49,7 @@ TITRE_PRODUCTIONS = "Mes productions"
 CONFIDENTIEL = (
     "Cette campagne étant confidentielle, je me permets de vous demander de ne "
     "pas diffuser les productions médiatiques qui vous sont partagées. "
-    "Cependant, n'hésitez pas à me contacter pour recevoir les dossiers de "
+    "Cependant, n’hésitez pas à me contacter pour recevoir les dossiers de "
     "campagne, de réseaux sociaux et de communication interne en entier si cela "
     "vous intéresse."
 )
@@ -79,9 +79,9 @@ RUBRIQUES = [
         "productions": [{
             "titre": "Campagne RP pour Takeaway.com",
             "texte": (
-                "Dans le cadre de mon master en Relations Publiques à l'IHECS, "
-                "j'ai eu une année pour réaliser, en équipe, une campagne de "
-                "communication complète autour d'une problématique réelle "
+                "Dans le cadre de mon master en Relations Publiques à l’IHECS, "
+                "j’ai eu une année pour réaliser, en équipe, une campagne de "
+                "communication complète autour d’une problématique réelle "
                 "donnée par la marque Takeaway.com. Un projet formateur mêlant "
                 "stratégie, créativité et travail collectif, présenté devant un "
                 "jury professionnel et récompensé par une grande distinction. "
@@ -101,12 +101,12 @@ RUBRIQUES = [
             {
                 "titre": "Stage chez Tribe Agency",
                 "texte": (
-                    TRIBE + "j'ai eu la chance de pouvoir gérer plusieurs "
+                    TRIBE + "j’ai eu la chance de pouvoir gérer plusieurs "
                     "comptes clients sur Instagram (ceux des restaurants La "
                     "Stazione, FightClub et Vérigoud ainsi que le compte "
-                    "professionnel de l'agence). Vous trouverez ci-joint "
-                    "certains contenus (posts/stories) que j'ai réalisés ainsi "
-                    "que des vues d'ensemble des feeds que j'ai mis en place."
+                    "professionnel de l’agence). Vous trouverez ci-joint "
+                    "certains contenus (posts/stories) que j’ai réalisés ainsi "
+                    "que des vues d’ensemble des feeds que j’ai mis en place."
                 ),
                 "ressources": "Contenus 9 à 20",
                 "medias": img(9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
@@ -133,7 +133,7 @@ RUBRIQUES = [
             {
                 "titre": "Projet fictif universitaire",
                 "texte": (
-                    "Voici le contenu que j'ai réalisé pour un événement fictif "
+                    "Voici le contenu que j’ai réalisé pour un événement fictif "
                     "dans le cadre de mon cours de communication événementielle "
                     "à l’IHECS."
                 ),
@@ -162,9 +162,9 @@ RUBRIQUES = [
             {
                 "titre": "Stage chez Tribe Agency",
                 "texte": (
-                    TRIBE + "j'ai eu la chance de pouvoir participer à de "
+                    TRIBE + "j’ai eu la chance de pouvoir participer à de "
                     "nombreux shootings. Vous trouverez ci-joint certains "
-                    "moodboards que j'ai réalisés ainsi que quelques photos "
+                    "moodboards que j’ai réalisés ainsi que quelques photos "
                     "emblématiques de ces shootings."
                 ),
                 "ressources": "Contenus 39 à 45",
@@ -187,9 +187,9 @@ RUBRIQUES = [
             {
                 "titre": "Stage chez Tribe Agency",
                 "texte": (
-                    TRIBE + "j'ai eu la chance d'être responsable des contenus "
+                    TRIBE + "j’ai eu la chance d’être responsable des contenus "
                     "vidéos à destination des réseaux sociaux (que ça soit la "
-                    "prise de vue ou le montage). J'ai filmé et monté plus de "
+                    "prise de vue ou le montage). J’ai filmé et monté plus de "
                     "50 réels à destination des comptes Instagram de nos "
                     "clients, en voici quelques-uns (vidéos montées sur CapCut "
                     "Pro)."
@@ -204,7 +204,7 @@ RUBRIQUES = [
                 "boucle": True,
             },
             {
-                "titre": "Contenus vidéo tournés et montés pour la marque de boisson non alcoolisée « Vendredi Apér0% » à destination d'Instagram",
+                "titre": "Contenus vidéo tournés et montés pour la marque de boisson non alcoolisée « Vendredi Apér0% » à destination d’Instagram",
                 "ressources": "Contenus « apéro final » et « poker final »",
                 "medias": vid("apero-final", "poker-final"),
                 "cols": 3,
@@ -217,7 +217,7 @@ RUBRIQUES = [
                 "cols": 1,
             },
             {
-                "titre": "Vidéos publicitaires tournées et montées dans le cadre d'un cours nommé « Audiovisual, Technology and Communication » suivi durant mon Erasmus",
+                "titre": "Vidéos publicitaires tournées et montées dans le cadre d’un cours nommé « Audiovisual, Technology and Communication » suivi durant mon Erasmus",
                 "ressources": "Contenus 75 à 76",
                 "medias": vid("pub-erasmus-1", "pub-erasmus-2"),
                 "cols": 2,
@@ -232,12 +232,12 @@ RUBRIQUES = [
             {
                 "titre": "Stage chez Tribe Agency",
                 "texte": (
-                    TRIBE + "j'ai eu la chance de pouvoir m'occuper de la "
+                    TRIBE + "j’ai eu la chance de pouvoir m’occuper de la "
                     "présence de plusieurs marques dans la presse notamment à "
-                    "travers la rédaction de newsletter à destination d'une "
+                    "travers la rédaction de newsletter à destination d’une "
                     "database de journalistes spécifiques. En voici un exemple "
                     "réalisé pour présenter certains de nos clients "
-                    "intéressants à aborder à l'occasion de la fête des mères."
+                    "intéressants à aborder à l’occasion de la fête des mères."
                 ),
                 "ressources": "Contenus 50 à 51",
                 "medias": img(50, 51),
@@ -250,7 +250,7 @@ RUBRIQUES = [
                 "cols": 2,
             },
             {
-                "titre": "Communiqués de presse rédigés dans le cadre de mes cours d'expression écrite suivis à l'IHECS",
+                "titre": "Communiqués de presse rédigés dans le cadre de mes cours d’expression écrite suivis à l’IHECS",
                 "ressources": "Contenus 54 à 55",
                 "medias": img(54, 55),
                 "cols": 2,
@@ -266,13 +266,13 @@ RUBRIQUES = [
                 "titre": "Réalisation d’affiches pour Takeaway.com",
                 "texte": (
                     "Dans le cadre de mon master en Relations Publiques à "
-                    "l'IHECS, j'ai eu une année pour réaliser, en équipe, une "
-                    "campagne de communication complète autour d'une "
+                    "l’IHECS, j’ai eu une année pour réaliser, en équipe, une "
+                    "campagne de communication complète autour d’une "
                     "problématique réelle donnée par la marque Takeaway.com. Un "
                     "projet formateur mêlant stratégie, créativité et travail "
                     "collectif, présenté devant un jury professionnel et "
                     "récompensé par une grande distinction. Voici les affiches "
-                    "que j'ai réalisées pour cette campagne."
+                    "que j’ai réalisées pour cette campagne."
                 ),
                 "note": (
                     "Celle-ci étant confidentielle, je me permets de vous "
@@ -292,25 +292,25 @@ RUBRIQUES = [
                 },
             },
             {
-                "titre": "Pochette de CD réalisée dans le cadre de mon cours de graphisme suivi à l'IHECS",
+                "titre": "Pochette de CD réalisée dans le cadre de mon cours de graphisme suivi à l’IHECS",
                 "ressources": "Contenu 61",
                 "medias": img(61),
                 "cols": 2,
             },
             {
-                "titre": "Affiche réalisée dans le cadre d’un cours de graphisme suivi à l'IHECS",
+                "titre": "Affiche réalisée dans le cadre d’un cours de graphisme suivi à l’IHECS",
                 "ressources": "Contenu 62",
                 "medias": img(62),
                 "cols": 3,
             },
             {
-                "titre": "Flyer et carte de visite réalisés dans le cadre d'un projet médiatique à l'IHECS",
+                "titre": "Flyer et carte de visite réalisés dans le cadre d’un projet médiatique à l’IHECS",
                 "ressources": "Contenus 63 à 66",
                 "medias": img(65, 66, 63, 64),
                 "cols": 2,
             },
             {
-                "titre": "Logo et affiches réalisés pour un événement fictif dans le cadre d'un cours de communication événementielle à l’IHECS",
+                "titre": "Logo et affiches réalisés pour un événement fictif dans le cadre d’un cours de communication événementielle à l’IHECS",
                 "ressources": "Contenus 67 à 68",
                 "medias": img(67, 68),
                 "cols": 3,
@@ -325,22 +325,22 @@ RUBRIQUES = [
             "titre": "Projet scolaire",
             "texte": (
                 "Dans le cadre de mon cours de Nouvelles Technologies "
-                "Créatives, j'ai réalisé un projet expérimental combinant "
+                "Créatives, j’ai réalisé un projet expérimental combinant "
                 "intelligence artificielle, storytelling et stratégie digitale. "
-                "L'objectif était de donner vie sur les réseaux sociaux à une "
-                "personnalité historique, en l'occurrence Cléopâtre, imaginée "
-                "comme une influenceuse contemporaine. J'ai développé une "
+                "L’objectif était de donner vie sur les réseaux sociaux à une "
+                "personnalité historique, en l’occurrence Cléopâtre, imaginée "
+                "comme une influenceuse contemporaine. J’ai développé une "
                 "stratégie digitale complète sur les réseaux sociaux autour de "
                 "sa personnalité, ses routines quotidiennes et ses intérêts, en "
                 "adaptant son image aux codes actuels."
             ),
             "texte2": (
                 "Toutes les images, voix, musiques et vidéos du projet ont été "
-                "entièrement créées à l'aide d'outils d'intelligence "
+                "entièrement créées à l’aide d’outils d’intelligence "
                 "artificielle (Midjourney, Replicate, Picsi, Face Swapp, "
-                "Rendernet, ElevenLabs, Suno, Runway et Heygen), à partir d'une "
+                "Rendernet, ElevenLabs, Suno, Runway et Heygen), à partir d’une "
                 "sculpture antique. Le résultat est une incarnation réaliste et "
-                "dynamique d'une Cléopâtre moderne active sur les réseaux "
+                "dynamique d’une Cléopâtre moderne active sur les réseaux "
                 "sociaux."
             ),
             "ressources": "Contenus 69 à 74",

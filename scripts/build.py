@@ -256,7 +256,8 @@ def accueil():
     # coupe après « la création » : la suite du texte continue en corps,
     # sans rien ajouter ni retirer au docx.
     cle = "la création"
-    coupe = texte.index(cle) + len(cle)
+    # on coupe à la fin de la PREMIÈRE PHRASE, pas au milieu d'une proposition
+    coupe = texte.index(".", texte.index(cle)) + 1
     phrase, reste = texte[:coupe], texte[coupe:].strip().lstrip(" ")
     phrase_html = e(phrase).replace(cle, f"<em>{cle}</em>", 1)
 
