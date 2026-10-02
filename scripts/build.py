@@ -283,7 +283,6 @@ def accueil():
         <p class="etq" style="margin-bottom:1.4rem">{e(C.PRESENTATION['titre'])}</p>
         <h2 class="condense presentation__phrase">{phrase_html}</h2>
         <p class="presentation__texte">{e(reste)}</p>
-        <dl class="reperes">{reperes}</dl>
       </div>
       <div class="presentation__portrait monte">
         {img_tag(C.PRESENTATION['portrait'], 'Portrait de ' + I['nom'], loading='lazy', decoding='async')}
