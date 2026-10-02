@@ -82,7 +82,7 @@ a { color: inherit; }
   font-size: 1.06em;
 }
 
-/* étiquette [ entre crochets ] */
+/* étiquette en petites capitales */
 .etq {
   font-family: var(--texte);
   font-size: .66rem;
@@ -93,8 +93,6 @@ a { color: inherit; }
   margin: 0;
   white-space: nowrap;
 }
-.etq::before { content: "[ "; }
-.etq::after  { content: " ]"; }
 .etq--jaune { color: var(--jaune); }
 
 .bloc { padding: var(--bloc) var(--marge); }
