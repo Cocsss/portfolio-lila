@@ -318,23 +318,13 @@ a { color: inherit; }
 
 /* ═══ PAGE DE RUBRIQUE : titre à gauche, photo en bloc à droite ═════ */
 .rub__tete {
-  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-  gap: clamp(1.5rem, 4vw, 4rem); align-items: end;
-  padding: calc(var(--marge) + 5rem) var(--marge) clamp(2rem, 4vw, 3.5rem);
-  min-height: 86svh;
+  padding: calc(var(--marge) + 5rem) var(--marge) clamp(1.5rem, 3vw, 2.5rem);
 }
-@media (max-width: 900px) { .rub__tete { grid-template-columns: 1fr; min-height: 0; } }
 .rub__haut { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: clamp(1.5rem, 4vw, 3rem); }
 .rub__haut a { text-decoration: none; }
 .rub__haut a:hover { color: var(--jaune); }
 .rub__titre { color: var(--jaune); font-size: clamp(2.8rem, 8.4vw, 8.4rem); }
 .rub__sous { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.4rem; }
-.rub__couv { width: 100%; }
-.rub__couv img {
-  width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: saturate(.92);
-  max-height: 70svh;
-}
-@media (max-width: 900px) { .rub__couv img { aspect-ratio: 4 / 3; } }
 
 /* ─── Production : texte à gauche (collant), images à droite ───── */
 .prod {

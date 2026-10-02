@@ -329,7 +329,6 @@ def page_rubrique(r, i):
         <p class="etq">{len(r['productions'])} production{'s' if len(r['productions']) > 1 else ''}</p>
       </div>
     </div>
-    <div class="rub__couv">{img_tag(COUVERTURES[r['id']], '', fetchpriority='high')}</div>
   </header>
 
   {''.join(production_html(p, k) for k, p in enumerate(r['productions']))}
