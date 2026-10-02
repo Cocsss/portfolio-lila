@@ -19,6 +19,13 @@
   --serif:   "Instrument Serif", Georgia, "Times New Roman", serif;
   --texte:   "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
+  /* Barème de mouvement — on s'y tient partout */
+  --t-vif:    160ms;   /* retour immédiat : couleur, opacité d'un badge */
+  --t-base:   260ms;   /* états d'interface : barre, boutons, visionneuse */
+  --t-ample:  420ms;   /* déplacements : panneaux, zooms d'image */
+  --c-sortie: cubic-bezier(.2, .7, .3, 1);
+  --c-doux:   cubic-bezier(.4, 0, .2, 1);
+
   --marge:   clamp(1.1rem, 4vw, 4rem);
   --bloc:    clamp(4rem, 10vw, 9rem);
   --max:     1760px;
@@ -103,14 +110,15 @@ a { color: inherit; }
   position: fixed; inset: 0 0 auto 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; flex-wrap: wrap;
-  padding: 1rem var(--marge);
-  transition: background .35s ease, padding .35s ease;
+  padding: .9rem var(--marge);           /* hauteur fixe : plus de layout animé */
+  transition: background var(--t-base) var(--c-doux),
+              -webkit-backdrop-filter var(--t-base) var(--c-doux),
+              backdrop-filter var(--t-base) var(--c-doux);
 }
 .nav--pose {
   background: rgba(55, 19, 82, .86);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
-  padding-block: .7rem;
 }
 .nav__marque {
   font-family: var(--display); font-weight: 800;
@@ -154,11 +162,18 @@ a { color: inherit; }
   .nav__bascule { display: block; order: 3; }
   .nav__contact { order: 2; }
   .nav__liens {
-    order: 4; width: 100%; display: grid; gap: 0;
-    max-height: 0; overflow: hidden;
-    transition: max-height .4s cubic-bezier(.2,.7,.3,1);
+    order: 4; width: 100%;
+    display: grid; grid-template-rows: 0fr; gap: 0;
+    overflow: hidden;
+    visibility: hidden;                  /* sinon les liens restent tabulables */
+    transition: grid-template-rows var(--t-ample) var(--c-sortie),
+                visibility 0s var(--t-ample);
   }
-  .nav--ouverte .nav__liens { max-height: 70svh; overflow-y: auto; }
+  .nav__liens > * { min-height: 0; }
+  .nav--ouverte .nav__liens {
+    grid-template-rows: 1fr; visibility: visible;
+    transition: grid-template-rows var(--t-ample) var(--c-sortie), visibility 0s;
+  }
   .nav__liens a {
     padding: .9rem 0; border-bottom: 1px solid var(--trait);
     font-size: .85rem;
@@ -246,7 +261,7 @@ a { color: inherit; }
 }
 .tuile img {
   width: 100%; height: 100%; object-fit: cover;
-  transition: transform .9s cubic-bezier(.2,.7,.3,1), filter .5s;
+  transition: transform var(--t-ample) var(--c-sortie), filter var(--t-ample) var(--c-sortie);
   filter: saturate(.92);
 }
 .tuile:hover img, .tuile:focus-visible img { transform: scale(1.06); filter: saturate(1); }
@@ -371,7 +386,7 @@ a { color: inherit; }
   overflow: hidden; cursor: zoom-in; position: relative;
   aspect-ratio: var(--r, 3/4);
 }
-.vignette img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.3,1); }
+.vignette img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--t-ample) var(--c-sortie); }
 .vignette:hover img, .vignette:focus-visible img { transform: scale(1.04); }
 .vignette::after {
   content: attr(data-n);
@@ -405,6 +420,8 @@ a { color: inherit; }
   padding: .14rem .4rem; opacity: 0; transition: opacity .25s;
 }
 .clip__duree:not(:empty) { opacity: .9; }
+/* lecture auto refusée ou mouvement réduit → contrôles natifs, pas de doublon */
+.clip--manuel .clip__son, .clip--manuel .clip__duree { display: none; }
 @media (hover: none) { .clip__son { opacity: 1; } }
 
 /* ─── Précédent / suivant : de simples liens, sans cadre ────────── */
@@ -427,9 +444,18 @@ a { color: inherit; }
 .boite {
   position: fixed; inset: 0; z-index: 300; background: rgba(55, 19, 82, .97);
   display: grid; grid-template-rows: auto 1fr auto;
-  opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--t-base) var(--c-doux), visibility 0s var(--t-base);
 }
-.boite.ouverte { opacity: 1; visibility: visible; }
+.boite.ouverte {
+  opacity: 1; visibility: visible;
+  transition: opacity var(--t-base) var(--c-doux), visibility 0s;
+}
+/* [hidden] doit l'emporter sur display:grid des commandes */
+.boite__fermer[hidden], .boite__fleche[hidden] { display: none; }
+/* l'image entre au lieu d'apparaître en coupure */
+.boite__scene img { animation: entree var(--t-base) var(--c-sortie) both; }
+@keyframes entree { from { opacity: 0; transform: scale(.985); } }
 .boite__barre { display: flex; justify-content: space-between; align-items: center; padding: 1rem var(--marge); }
 .boite__compte { font-family: var(--display); font-weight: 700; font-size: .8rem; letter-spacing: .1em; color: var(--jaune); margin: 0; }
 .boite__scene { display: grid; place-items: center; min-height: 0; padding: 0 clamp(1rem, 6vw, 5rem); }
@@ -450,6 +476,20 @@ body.bloque { overflow: hidden; }
 .monte { opacity: 0; transform: translateY(22px); }
 .monte.vu { opacity: 1; transform: none; transition: opacity .8s cubic-bezier(.2,.7,.3,1), transform .8s cubic-bezier(.2,.7,.3,1); }
 @media (prefers-reduced-motion: reduce) { .monte { opacity: 1; transform: none; } .monte.vu { transition: none; } }
+
+/* ═══ MOUVEMENT RÉDUIT : on neutralise TOUT le mouvement ═══════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* les changements d'état restent, les déplacements disparaissent */
+  .tuile:hover img, .tuile:focus-visible img,
+  .vignette:hover img, .vignette:focus-visible img { transform: none; }
+  .nav__contact:hover { transform: none; }
+}
 
 @media print {
   .nav, .boite, .clip__son, .clip__duree, .voisins { display: none !important; }

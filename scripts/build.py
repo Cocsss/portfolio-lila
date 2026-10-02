@@ -208,9 +208,9 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 
 <nav class="nav" aria-label="Navigation principale">
   {"<span class=\"nav__marque\" aria-hidden=\"true\"></span>" if classe == "page-accueil" else f'<a class="nav__marque" href="index.html">{e(I["nom"])}</a>'}
-  <div class="nav__liens">{liens}</div>
+  <div class="nav__liens" id="menu-principal">{liens}</div>
   <a class="nav__contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>
-  <button class="nav__bascule" type="button" aria-expanded="false" aria-label="Ouvrir le menu"><span></span><span></span></button>
+  <button class="nav__bascule" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Menu"><span></span><span></span></button>
 </nav>
 
 <main id="contenu">
@@ -227,7 +227,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 
 <div class="boite" role="dialog" aria-modal="true" aria-label="Visionneuse" aria-hidden="true">
   <div class="boite__barre">
-    <p class="boite__compte"></p>
+    <p class="boite__compte" aria-live="polite"></p>
     <button class="boite__fermer" type="button" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="boite__scene"></div>
