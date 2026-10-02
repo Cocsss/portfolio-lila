@@ -170,9 +170,7 @@ a { color: inherit; }
 
 /* ═══ HERO (accueil) : nom sur le vert, bande d'images dessous ═══ */
 .hero {
-  min-height: 100svh;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: calc(var(--marge) + 4.5rem) var(--marge) var(--marge);
+  padding: calc(var(--marge) + 5.5rem) var(--marge) clamp(1.5rem, 3vw, 3rem);
 }
 .hero__nom {
   font-size: clamp(3.2rem, 16vw, 320px);  /* « Lila Narinx » ≈ 5,5 em en Archivo 800 wdth 112 */
@@ -186,7 +184,7 @@ a { color: inherit; }
 .hero__bas {
   display: flex; justify-content: space-between; align-items: flex-end;
   gap: 1.5rem; flex-wrap: wrap;
-  margin-top: clamp(1rem, 2.5vw, 2rem);
+  margin-top: clamp(.8rem, 1.6vw, 1.4rem);
 }
 .hero__role {
   font-family: var(--display); font-weight: 500;
