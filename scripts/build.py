@@ -84,19 +84,12 @@ def compte_medias(r):
 #  son orientation, en suivant un motif qui se répète — d'où l'aspect
 #  « images dispersées » des références, sans rien forcer au recadrage.
 # ─────────────────────────────────────────────────────────────────────
-MOTIFS = {
-    "tres-haut": [2, 2, 2, 2, 2, 2],         # stories, captures d'écran
-    "haut":      [2, 2, 2, 3, 3, 2, 4, 2],   # affiches, posts 4:5, pages A4
-    "carre":     [3, 3, 2, 2, 2],
-    "large":     [6, 3, 3],                  # captures de sites, double pages
-    "banniere":  [6],
-}
-
-
-# À égalité de compte, la famille la plus ÉTROITE l'emporte.
-ORDRE   = ("tres-haut", "haut", "carre", "large", "banniere")
-PLAFOND = {"tres-haut": 2, "haut": 3, "carre": 3, "large": 6, "banniere": 6}
-UNIQUE  = {"tres-haut": 2, "haut": 3, "carre": 3, "large": 4, "banniere": 6}
+# Combien de tuiles par rangée (sur 6 colonnes) selon l'orientation.
+# La largeur vient de la FORME de l'image, jamais de sa position dans la
+# liste : deux visuels de même format ont donc toujours la même taille.
+PAR_RANGEE = {"tres-haut": 3, "haut": 3, "carre": 3, "large": 2, "banniere": 1}
+# cas d'un visuel seul dans sa famille : on ne l'étale pas sur 6 colonnes
+UNIQUE     = {"tres-haut": 2, "haut": 3, "carre": 3, "large": 4, "banniere": 6}
 
 
 def famille(w, h):
@@ -152,20 +145,16 @@ def collage_html(medias, titre_prod, depart=0):
     if not medias:
         return ""
     fams = [famille(*dims(m)) for m in medias]
-    # `max(set(fams), key=fams.count)` itérait un set de chaînes : à égalité,
-    # le gagnant dépendait du hash randomisé par processus — 4 galeries sur
-    # 23 changeaient de mise en page d'une génération à l'autre.
-    dominante = min(set(fams), key=lambda f: (-fams.count(f), ORDRE.index(f)))
-    motif = MOTIFS[dominante]
     tuiles, pos = [], depart
     for i, m in enumerate(medias):
         fam = fams[i]
-        span = UNIQUE[fam] if len(medias) == 1 else motif[i % len(motif)]
-        if fam == "banniere":
-            span = 6
-        if fam == "large" and span < 3:
-            span = 3
-        span = min(span, PLAFOND[fam])     # borne haute : plus de tuile de 1387 px
+        combien = fams.count(fam)
+        if combien <= 1:
+            span = UNIQUE[fam]
+        else:
+            # autant que possible par rangée, sans jamais dépasser le nombre
+            # d'images de cette famille (2 visuels → 2 par rangée, pas 3)
+            span = 6 // min(PAR_RANGEE[fam], combien)
         suivant = pos + 1 if m["type"] == "image" else pos
         t = media_html(m, titre_prod, span, suivant)
         if t:
