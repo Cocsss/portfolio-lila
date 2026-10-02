@@ -205,7 +205,6 @@ RUBRIQUES = [
             },
             {
                 "titre": "Contenus vidéo tournés et montés pour la marque de boisson non alcoolisée « Vendredi Apér0% » à destination d'Instagram",
-                "texte": "Vidéos montées sur Première Pro.",
                 "ressources": "Contenus « apéro final » et « poker final »",
                 "medias": vid("apero-final", "poker-final"),
                 "cols": 3,
@@ -219,7 +218,6 @@ RUBRIQUES = [
             },
             {
                 "titre": "Vidéos publicitaires tournées et montées dans le cadre d'un cours nommé « Audiovisual, Technology and Communication » suivi durant mon Erasmus",
-                "texte": "Vidéos montées sur Première Pro.",
                 "ressources": "Contenus 75 à 76",
                 "medias": vid("pub-erasmus-1", "pub-erasmus-2"),
                 "cols": 2,

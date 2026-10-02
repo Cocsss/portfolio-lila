@@ -303,7 +303,7 @@ def accueil():
   </section>
 
 """
-    return coquille(f"{I['nom']} — Portfolio",
+    return coquille(f"{I['nom']} · Portfolio",
                     f"Portfolio de {I['nom']} : {I['role'].lower()}.",
                     corps, classe="page-accueil")
 
@@ -326,8 +326,8 @@ def page_rubrique(r, i):
     <a href="{page_de(suiv)}"><span class="etq">Suivant</span><strong>{e(suiv['titre'])}</strong></a>
   </nav>
 """
-    desc = r["productions"][0].get("texte") or f"{r['titre']} — portfolio de {C.IDENTITE['nom']}."
-    return coquille(f"{r['titre']} — {C.IDENTITE['nom']}", desc[:300], corps,
+    desc = r["productions"][0].get("texte") or f"{r['titre']}, portfolio de {C.IDENTITE['nom']}."
+    return coquille(f"{r['titre']} · {C.IDENTITE['nom']}", desc[:300], corps,
                     actif=r["id"], classe="page-rubrique")
 
 
@@ -351,7 +351,7 @@ def page_contact():
     </div>
   </section>
 """
-    return coquille(f"Contact — {I['nom']}", f"Contacter {I['nom']}.", corps,
+    return coquille(f"Contact · {I['nom']}", f"Contacter {I['nom']}.", corps,
                     actif="contact", classe="page-contact")
 
 
@@ -365,7 +365,7 @@ def page_404():
     </div>
   </section>
 """
-    return coquille("Page introuvable — Lila Narinx", "Page introuvable.", corps)
+    return coquille("Page introuvable · Lila Narinx", "Page introuvable.", corps)
 
 
 if __name__ == "__main__":
