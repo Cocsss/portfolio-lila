@@ -55,15 +55,26 @@ Aucune iframe, aucun player tiers, aucune pub.
 
 ```
 .
-├── index.html              Site
-├── assets/                 Images du site (visuels triés, posters vidéo)
-├── media/
-│   ├── photos/             Photos sources utilisées dans le site
-│   └── videos/             (gitignoré — vit sur R2)
-├── PUSH.md                 Comment mettre le site à jour
-├── DEPLOY.md               Mise en place Cloudflare Pages + R2
+├── index.html          Site (page d'attente pour l'instant)
+├── assets/             Images web optimisées — VERSIONNÉ
+│
+├── media/              ⛔ gitignoré (~985 Mo) — reste sur le Mac
+│   ├── photos/         76 visuels du brief, rangés par section
+│   └── videos/         11 vidéos → vont sur Cloudflare R2
+│
+├── _sources/           ⛔ gitignoré (~993 Mo) — reste sur le Mac
+│   ├── brief/          construction portfolio.docx
+│   ├── images-vrac/    6 jpegs à trier
+│   ├── CV Lila Narinx.pdf
+│   └── wetransfer_….zip
+│
+├── MEDIA.md            Index : n° du brief → fichier
+├── PUSH.md             Mettre le site à jour
+├── DEPLOY.md           Mise en place Cloudflare Pages + R2
 └── README.md
 ```
+
+Le détail de chaque dossier `media/` est dans **`MEDIA.md`**.
 
 ## Mise à jour
 
