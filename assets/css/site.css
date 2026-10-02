@@ -410,20 +410,21 @@ a { color: inherit; }
 .clip__duree:not(:empty) { opacity: .9; }
 @media (hover: none) { .clip__son { opacity: 1; } }
 
-/* ─── Précédent / suivant ───────────────────────────────────────── */
-.voisins { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--trait); border-top: 1px solid var(--trait); }
-.voisins a {
-  background: var(--vert); text-decoration: none;
-  padding: clamp(1.8rem, 4vw, 3rem) var(--marge);
-  display: flex; flex-direction: column; gap: .5rem; transition: background .3s;
+/* ─── Précédent / suivant : de simples liens, sans cadre ────────── */
+.voisins {
+  display: flex; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+  padding: clamp(2rem, 5vw, 4rem) var(--marge);
 }
-.voisins a:hover { background: var(--vert-jour); }
-.voisins a:last-child { text-align: right; align-items: flex-end; }
+.voisins a { text-decoration: none; display: flex; flex-direction: column; gap: .4rem; }
+.voisins a:last-child { text-align: right; align-items: flex-end; margin-left: auto; }
 .voisins strong {
   font-family: var(--display); font-weight: 800; font-variation-settings: "wdth" 108;
-  font-size: clamp(1.4rem, 3vw, 2.6rem); letter-spacing: -.04em; line-height: 1; color: var(--jaune);
+  font-size: clamp(1.3rem, 2.6vw, 2.2rem); letter-spacing: -.04em; line-height: 1;
+  color: var(--jaune); transition: color .2s;
 }
-@media (max-width: 640px) { .voisins { grid-template-columns: 1fr; } .voisins a:last-child { text-align: left; align-items: flex-start; } }
+.voisins a:first-child strong::before { content: "← "; }
+.voisins a:last-child strong::after { content: " →"; }
+.voisins a:hover strong { color: var(--blanc); }
 
 /* ═══ LIGHTBOX ════════════════════════════════════════════════════ */
 .boite {
