@@ -25,7 +25,7 @@ IDENTITE = {
 PRESENTATION = {
     "titre": "Présentation générale",
     "texte": (
-        "Je m’appelle Lila Narinx et j’ai toujours été animée par la création "
+        "J’ai toujours été animée par la création "
         "que ce soit à travers le graphisme, la photographie, la vidéo, ou "
         "encore la rédaction. Aujourd’hui diplômée en Relations Publiques "
         "(IHECS) et Marketing (ICHEC), je me spécialise en social media et "

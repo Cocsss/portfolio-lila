@@ -221,7 +221,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <meta property="og:type" content="website">
 <meta property="og:title" content="{e(titre_onglet)}">
 <meta property="og:description" content="{e(description)}">
-<meta property="og:image" content="https://{e(I['domaine'])}/assets/img/portrait.webp">
+<meta property="og:image" content="https://{e(I['domaine'])}/assets/img/42.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%235b5617'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='Helvetica,Arial' font-weight='bold' font-size='54' fill='%23eeec83'>L</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -307,14 +307,11 @@ def accueil():
   </section>
 
   <section class="bloc" id="presentation" aria-label="{e(C.PRESENTATION['titre'])}">
-    <div class="dedans presentation">
+    <div class="dedans">
       <div class="monte">
         <p class="etq" style="margin-bottom:1.4rem">{e(C.PRESENTATION['titre'])}</p>
         <h2 class="condense presentation__phrase">{phrase_html}</h2>
         <p class="presentation__texte">{e(reste)}</p>
-      </div>
-      <div class="presentation__portrait monte">
-        {img_tag(C.PRESENTATION['portrait'], 'Portrait de ' + I['nom'], loading='lazy', decoding='async')}
       </div>
     </div>
   </section>
