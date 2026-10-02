@@ -275,11 +275,6 @@ def accueil():
         <p class="hero__role">{e(I['role'])}</p>
         <p class="etq">Portfolio</p>
       </div>
-      <div class="hero__bande" aria-hidden="true">
-        {img_tag(IMG / '42.webp', '', fetchpriority='high')}
-        {img_tag(IMG / '40.webp', '', fetchpriority='high')}
-        {img_tag(POSTERS / 'reel-cocktail-le-corbier.webp', '', fetchpriority='high')}
-      </div>
     </div>
   </section>
 

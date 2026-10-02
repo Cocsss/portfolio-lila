@@ -193,18 +193,6 @@ a { color: inherit; }
   font-size: clamp(.9rem, 1.4vw, 1.2rem);
   color: var(--blanc); margin: 0; max-width: 32ch; line-height: 1.3;
 }
-.hero__bande {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(.5rem, 1vw, .9rem);
-  margin-top: clamp(1.6rem, 4vw, 3.2rem);
-}
-.hero__bande img {
-  width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; filter: saturate(.92);
-}
-@media (max-width: 700px) {
-  .hero__bande { grid-template-columns: 1fr 1fr; }
-  .hero__bande img:nth-child(3) { display: none; }
-}
 
 /* ═══ PRÉSENTATION ════════════════════════════════════════════════ */
 .presentation {
