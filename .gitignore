@@ -1,0 +1,63 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Claude / outils locaux
+.claude/
+
+# Téléchargements en cours / archives sources — JAMAIS dans le repo
+*.crdownload
+*.download
+*.part
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+
+# Backups locaux (pas à pousser)
+*copie*.html
+*copy*.html
+
+# Vidéos — elles vivent sur Cloudflare R2, pas ici
+media/videos/raw/
+media/videos/*.mov
+media/videos/*.MOV
+media/videos/*.mp4
+media/videos/*.MP4
+media/videos/*.webm
+media/videos/*.mkv
+*.mov
+*.MOV
+*.mp4
+*.MP4
+
+# Photos brutes haute-def
+media/photos/raw/
+*.RAF
+*.ARW
+*.CR2
+*.NEF
+
+# Build artifacts / deps
+node_modules/
+dist/
+build/
+.env
+.env.*
+
+# ── Matériel source — reste en LOCAL, jamais dans un repo public ──
+# La campagne Takeaway.com est sous confidentialité (cf. brief), et le CV
+# contient des données personnelles. Ces fichiers restent sur le Mac.
+# Les visuels retenus pour le site iront dans assets/ après tri.
+/*.jpeg
+/*.jpg
+/*.png
+/*.pdf
+/*.docx
