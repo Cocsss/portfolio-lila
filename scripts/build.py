@@ -184,8 +184,6 @@ def production_html(p, i):
             g.append(f'<p class="prod__para">{e(p[cle])}</p>')
     if p.get("note"):
         g.append(f'<p class="prod__note"><strong>Confidentiel.</strong> {e(p["note"])}</p>')
-    if p.get("ressources"):
-        g.append(f'<p class="etq etq--jaune prod__ress">{e(p["ressources"])}</p>')
     g.append("</div>")
     g.append('<div class="prod__medias">')
     nb = sum(1 for m in p["medias"] if m["type"] == "image")
@@ -194,8 +192,6 @@ def production_html(p, i):
     if s:
         g.append('<div class="prod__suite">')
         g.append(f'<p class="prod__para monte">{e(s["texte"])}</p>')
-        if s.get("ressources"):
-            g.append(f'<p class="etq etq--jaune" style="margin-bottom:1rem">{e(s["ressources"])}</p>')
         g.append(collage_html(s["medias"], p["titre"], depart=nb))
         g.append("</div>")
     g.append("</div></section>")
