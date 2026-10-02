@@ -93,6 +93,12 @@ MOTIFS = {
 }
 
 
+# À égalité de compte, la famille la plus ÉTROITE l'emporte.
+ORDRE   = ("tres-haut", "haut", "carre", "large", "banniere")
+PLAFOND = {"tres-haut": 2, "haut": 3, "carre": 3, "large": 6, "banniere": 6}
+UNIQUE  = {"tres-haut": 2, "haut": 3, "carre": 3, "large": 4, "banniere": 6}
+
+
 def famille(w, h):
     r = w / h
     if r >= 2.2: return "banniere"
@@ -102,7 +108,7 @@ def famille(w, h):
     return "tres-haut"
 
 
-def media_html(m, titre_prod, span):
+def media_html(m, titre_prod, span, pos=0):
     if m["type"] == "image":
         n = m["n"]
         src, plein = IMG / f"{n}.webp", IMG / f"{n}@full.webp"
@@ -110,11 +116,12 @@ def media_html(m, titre_prod, span):
             print(f"   ⚠️  visuel {n} absent — ignoré")
             return ""
         w, h = taille(src)
-        alt = f"{titre_prod}, visuel {n}"
+        # numéro de POSITION, pas le numéro interne du brief
+        alt = f"{titre_prod}, visuel {pos}" if pos else titre_prod
         contenir = " vignette--contenir" if famille(w, h) == "banniere" else ""
-        large = " large" if span >= 4 else ""
+        large = " large" if (w / h) >= 1.2 or span >= 4 else ""
         return (
-            f'<button class="vignette{contenir}{large}" type="button" data-n="{n}" '
+            f'<button class="vignette monte{contenir}{large}" type="button" '
             f'data-plein="{plein.as_posix()}" data-alt="{e(alt)}" '
             f'style="--r:{w}/{h};--s:{span}">'
             f'<img src="{src.as_posix()}" alt="{e(alt)}" width="{w}" height="{h}" '
@@ -124,11 +131,11 @@ def media_html(m, titre_prod, span):
     poster = POSTERS / f"{f}.webp"
     pw, ph = taille(poster) if poster.exists() else (9, 16)
     att_poster = f' poster="{poster.as_posix()}"' if poster.exists() else ""
-    large = " large" if span >= 4 else ""
+    large = " large" if (pw / ph) >= 1.2 or span >= 4 else ""
     return (
-        f'<div class="clip{large}" style="--r:{pw}/{ph};--s:{span}">'
+        f'<div class="clip monte{large}" style="--r:{pw}/{ph};--s:{span}">'
         f'<video data-f="{e(f)}"{att_poster} muted loop playsinline preload="none" '
-        f'width="{pw}" height="{ph}" aria-label="{e(f.replace("-", " "))}"></video>'
+        f'width="{pw}" height="{ph}" tabindex="0" aria-label="{e(titre_prod)}"></video>'
         f'<button class="clip__son" type="button" aria-label="Activer le son"></button>'
         f'<span class="clip__duree" aria-hidden="true"></span></div>'
     )
@@ -141,23 +148,29 @@ def dims(m):
     return taille(p) if p.exists() else (9, 16)
 
 
-def collage_html(medias, titre_prod):
+def collage_html(medias, titre_prod, depart=0):
     if not medias:
         return ""
     fams = [famille(*dims(m)) for m in medias]
-    dominante = max(set(fams), key=fams.count)
+    # `max(set(fams), key=fams.count)` itérait un set de chaînes : à égalité,
+    # le gagnant dépendait du hash randomisé par processus — 4 galeries sur
+    # 23 changeaient de mise en page d'une génération à l'autre.
+    dominante = min(set(fams), key=lambda f: (-fams.count(f), ORDRE.index(f)))
     motif = MOTIFS[dominante]
-    tuiles = []
+    tuiles, pos = [], depart
     for i, m in enumerate(medias):
         fam = fams[i]
-        span = 6 if fam == "banniere" else motif[i % len(motif)]
-        if len(medias) == 1 and fam != "banniere":
-            span = 4 if fam == "large" else 3
+        span = UNIQUE[fam] if len(medias) == 1 else motif[i % len(motif)]
+        if fam == "banniere":
+            span = 6
         if fam == "large" and span < 3:
             span = 3
-        t = media_html(m, titre_prod, span)
+        span = min(span, PLAFOND[fam])     # borne haute : plus de tuile de 1387 px
+        suivant = pos + 1 if m["type"] == "image" else pos
+        t = media_html(m, titre_prod, span, suivant)
         if t:
             tuiles.append(t)
+            pos = suivant
     return f'<div class="collage">{"".join(tuiles)}</div>'
 
 
@@ -174,15 +187,16 @@ def production_html(p, i):
     if p.get("ressources"):
         g.append(f'<p class="etq etq--jaune prod__ress">{e(p["ressources"])}</p>')
     g.append("</div>")
-    g.append('<div class="prod__medias monte">')
+    g.append('<div class="prod__medias">')
+    nb = sum(1 for m in p["medias"] if m["type"] == "image")
     g.append(collage_html(p["medias"], p["titre"]))
     s = p.get("suite")
     if s:
         g.append('<div class="prod__suite">')
-        g.append(f'<p class="prod__para">{e(s["texte"])}</p>')
+        g.append(f'<p class="prod__para monte">{e(s["texte"])}</p>')
         if s.get("ressources"):
             g.append(f'<p class="etq etq--jaune" style="margin-bottom:1rem">{e(s["ressources"])}</p>')
-        g.append(collage_html(s["medias"], p["titre"]))
+        g.append(collage_html(s["medias"], p["titre"], depart=nb))
         g.append("</div>")
     g.append("</div></section>")
     return "".join(g)
@@ -220,7 +234,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <a class="saut-contenu" href="#contenu">Aller au contenu</a>
 
 <nav class="nav" aria-label="Navigation principale">
-  {"<span class=\"nav__marque\" aria-hidden=\"true\"></span>" if classe == "page-accueil" else f'<a class="nav__marque" href="index.html">{e(I["nom"])}</a>'}
+  {f'<span class="nav__marque" aria-hidden="true" style="visibility:hidden">{e(I["nom"])}</span>' if classe == "page-accueil" else f'<a class="nav__marque" href="index.html">{e(I["nom"])}</a>'}
   <div class="nav__liens" id="menu-principal">{liens}</div>
   <a class="nav__contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>
   <button class="nav__bascule" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Menu"><span></span><span></span></button>
@@ -277,7 +291,7 @@ def accueil():
     reperes = "".join(f"<div><dt>{e(t)}</dt><dd>{e(d)}</dd></div>" for t, d in C.REPERES)
     tuiles = "".join(
         f'<a class="tuile monte" href="{page_de(r)}">'
-        + img_tag(COUVERTURES[r["id"]], r["titre"], loading="lazy", decoding="async")
+        + img_tag(COUVERTURES[r["id"]], "", loading="lazy", decoding="async")
         + f'<span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span>'
         f'<span class="tuile__compte">{compte_medias(r)} contenus</span></span></a>'
         for i, r in enumerate(C.RUBRIQUES))
@@ -327,15 +341,15 @@ def page_rubrique(r, i):
     corps = f"""
   <header class="rub__tete" aria-label="{e(r['titre'])}">
     <div>
-      <h1 class="titre-geant rub__titre">{e(r['titre'])}</h1>
+      <h1 class="titre-geant rub__titre" style="--n:{len(r['titre'])}">{e(r['titre'])}</h1>
     </div>
   </header>
 
   {''.join(production_html(p, k) for k, p in enumerate(r['productions']))}
 
   <nav class="voisins" aria-label="Rubriques voisines">
-    <a href="{page_de(prec)}"><span class="etq">Précédent</span><strong>{e(prec['titre'])}</strong></a>
-    <a href="{page_de(suiv)}"><span class="etq">Suivant</span><strong>{e(suiv['titre'])}</strong></a>
+    <a href="{page_de(prec)}"><span class="etq">Précédent</span> <strong>{e(prec['titre'])}</strong></a>
+    <a href="{page_de(suiv)}"><span class="etq">Suivant</span> <strong>{e(suiv['titre'])}</strong></a>
   </nav>
 """
     desc = r["productions"][0].get("texte") or f"{r['titre']}, portfolio de {C.IDENTITE['nom']}."

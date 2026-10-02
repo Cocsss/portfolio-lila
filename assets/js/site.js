@@ -55,13 +55,19 @@
   if (doux) {
     montants.forEach(el => el.classList.add('vu'));
   } else if (montants.length) {
+    /* threshold .06 était surfacique : un bloc de 3000 px devait montrer
+       190 px, une vignette de 300 px seulement 18. threshold 0 + marge
+       basse négative rend le déclenchement indépendant de la hauteur. */
     const oeil = new IntersectionObserver((entrees, obs) => {
-      entrees.forEach(e => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('vu');
-        obs.unobserve(e.target);
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: .06 });
+      entrees
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        .forEach((e, k) => {
+          e.target.style.transitionDelay = Math.min(k * 60, 240) + 'ms';
+          e.target.classList.add('vu');
+          obs.unobserve(e.target);
+        });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
     montants.forEach(el => oeil.observe(el));
 
     /* Filet : uniquement si l'observateur n'a RIEN produit (navigateur
@@ -122,8 +128,8 @@
       classes.forEach(([clip], rang) => {
         const v = $('video', clip);
         if (!v) return;
-        charger(v);
-        if (rang < MAX_SIMULTANE && !doux) {
+        if (rang < MAX_SIMULTANE + 1) charger(v);
+        if (rang < MAX_SIMULTANE && !doux && clip.dataset.gele !== '1') {
           v.play().catch(() => { v.controls = true; clip.classList.add('clip--manuel'); });
         } else {
           v.pause();
@@ -159,6 +165,19 @@
       /* en mouvement réduit, on ne lance rien : on donne les contrôles */
       if (doux) { v.controls = true; clip.classList.add('clip--manuel'); }
 
+      /* On doit pouvoir arrêter une animation qui tourne (WCAG 2.2.2).
+         La vidéo est elle-même la commande : aucun bouton ajouté. */
+      const basculer = () => {
+        const gele = clip.dataset.gele === '1';
+        clip.dataset.gele = gele ? '0' : '1';
+        if (gele) { charger(v); v.play().catch(() => {}); } else v.pause();
+      };
+      v.addEventListener('click', () => { if (!v.controls) basculer(); });
+      v.addEventListener('keydown', ev => {
+        if (v.controls) return;
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); basculer(); }
+      });
+
       if (duree) {
         v.addEventListener('loadedmetadata', () => { duree.textContent = mmss(v.duration); });
       }
@@ -179,7 +198,8 @@
             });
           }
           v.muted = !v.muted;                 /* volumechange déclenchera le redessin */
-          v.play().catch(() => {});
+          if (!v.muted) clip.dataset.gele = '0';
+          if (clip.dataset.gele !== '1') v.play().catch(() => {});
         });
         v.addEventListener('volumechange', dessine);
       }
@@ -198,7 +218,7 @@
   const prec    = $('.boite__fleche--prec', boite);
   const suiv    = $('.boite__fleche--suiv', boite);
 
-  let lot = [], i = 0, declencheur = null;
+  let lot = [], i = 0, declencheur = null, glisse = false;
 
   async function peindre() {
     const el = lot[i];
@@ -208,7 +228,7 @@
     const source = $('img', el);
     if (source) { img.width = source.width; img.height = source.height; }
     try { await img.decode(); } catch (_) { /* on affiche quand même */ }
-    if (lot[i] !== el) return;             /* on est déjà passé à la suivante */
+    if (lot[i] !== el || !boite.classList.contains('ouverte')) return;
     scene.replaceChildren(img);
     compte.textContent = `${String(i + 1).padStart(2, '0')} / ${String(lot.length).padStart(2, '0')}`;
     legende.textContent = (el.dataset.alt || '').replace(/, visuel \d+$/, '');
@@ -219,12 +239,22 @@
     });
   }
 
+  function viderSiFerme(ev) {
+    if (ev.target !== boite || ev.propertyName !== 'opacity') return;
+    boite.removeEventListener('transitionend', viderSiFerme);
+    if (!boite.classList.contains('ouverte')) scene.replaceChildren();
+  }
+
   function ouvrir(el) {
     /* le conteneur de galerie s'appelle .collage dans le HTML généré */
-    lot = $$('.vignette[data-plein]', el.closest('.collage') || document);
+    /* le lot, c'est la PRODUCTION (collage principal + sa « suite ») */
+    lot = $$('.vignette[data-plein]',
+             el.closest('.prod__medias') || el.closest('.collage') || document);
     if (!lot.length) return;
     i = Math.max(0, lot.indexOf(el));
     declencheur = el;
+    glisse = false;
+    boite.removeEventListener('transitionend', viderSiFerme);
     boite.classList.add('ouverte');
     boite.setAttribute('aria-hidden', 'false');
     document.body.classList.add('bloque');
@@ -236,7 +266,7 @@
     boite.classList.remove('ouverte');
     boite.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('bloque');
-    scene.replaceChildren();
+    boite.addEventListener('transitionend', viderSiFerme);
     if (declencheur) { declencheur.focus(); declencheur = null; }
   }
 
@@ -249,7 +279,12 @@
   fermer.addEventListener('click', clore);
   prec.addEventListener('click', () => glisser(-1));
   suiv.addEventListener('click', () => glisser(1));
-  boite.addEventListener('click', e => { if (e.target === boite || e.target === scene) clore(); });
+  /* l'<img> absorbait le clic : la visionneuse restait ouverte */
+  boite.addEventListener('click', e => {
+    if (glisse) { glisse = false; return; }
+    if (e.target.closest('.boite__barre, .boite__fleche')) return;
+    clore();
+  });
 
   addEventListener('keydown', e => {
     if (e.key === 'Escape' && nav.classList.contains('nav--ouverte')) { fermerMenu(true); return; }
@@ -274,7 +309,7 @@
   scene.addEventListener('touchend', e => {
     if (x0 === null) return;
     const d = e.changedTouches[0].clientX - x0;
-    if (Math.abs(d) > 48) glisser(d < 0 ? 1 : -1);
+    if (Math.abs(d) > 48) { glisse = true; glisser(d < 0 ? 1 : -1); }
     x0 = null;
   }, { passive: true });
 })();
