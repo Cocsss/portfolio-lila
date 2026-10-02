@@ -291,7 +291,6 @@ def accueil():
       </div>
       <div class="presentation__portrait monte">
         {img_tag(C.PRESENTATION['portrait'], 'Portrait de ' + I['nom'], loading='lazy', decoding='async')}
-        <p class="etq">{e(I['nom'])}</p>
       </div>
     </div>
   </section>

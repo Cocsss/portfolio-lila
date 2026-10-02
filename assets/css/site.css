@@ -207,13 +207,12 @@ a { color: inherit; }
   font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.6;
   color: var(--blanc-70); max-width: 52ch; margin: 0;
 }
-.presentation__portrait { position: relative; width: min(100%, 420px); justify-self: end; }
-@media (max-width: 900px) { .presentation__portrait { justify-self: start; width: min(100%, 320px); } }
+.presentation__portrait { position: relative; width: min(100%, 260px); justify-self: end; }
+@media (max-width: 900px) { .presentation__portrait { justify-self: start; width: min(100%, 220px); } }
 .presentation__portrait img {
-  width: 100%; aspect-ratio: 537 / 730; object-fit: cover;
+  width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 28%;
   filter: grayscale(1) contrast(1.05);
 }
-.presentation__portrait .etq { position: absolute; left: 0; bottom: -1.8rem; }
 
 .reperes {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
