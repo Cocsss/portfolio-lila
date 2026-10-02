@@ -199,7 +199,7 @@ a { color: inherit; }
 }
 @media (max-width: 900px) { .presentation { grid-template-columns: 1fr; align-items: start; } }
 .presentation__phrase {
-  font-size: clamp(2.4rem, 7.2vw, 7.6rem);
+  font-size: clamp(1.9rem, 3.9vw, 3.9rem);
   color: var(--blanc);
   margin-bottom: clamp(1.6rem, 3vw, 2.6rem);
 }
