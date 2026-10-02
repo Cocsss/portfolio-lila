@@ -61,3 +61,6 @@ build/
 # Python
 __pycache__/
 *.pyc
+
+# Dossier de dépôt (les fichiers sont traités puis rangés dans media/)
+_DEPOSER-ICI/
