@@ -264,7 +264,7 @@ def accueil():
     tuiles = "".join(
         f'<a class="tuile monte" href="{page_de(r)}">'
         + img_tag(COUVERTURES[r["id"]], r["titre"], loading="lazy", decoding="async")
-        f'<span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span>'
+        + f'<span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span>'
         f'<span class="tuile__compte">{compte_medias(r)} contenus</span></span></a>'
         for i, r in enumerate(C.RUBRIQUES))
 
