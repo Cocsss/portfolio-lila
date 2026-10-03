@@ -55,7 +55,7 @@ body {
 }
 img, video { display: block; max-width: 100%; }
 a { color: inherit; }
-::selection { background: var(--jaune); color: var(--vert); }
+::selection, ::-moz-selection { background: var(--jaune); color: var(--vert); }
 :focus-visible { outline: 2px solid var(--jaune); outline-offset: 3px; }
 
 .saut-contenu {
