@@ -127,29 +127,40 @@ a { color: inherit; }
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
 }
+/* « Lila Narinx » ramène à l'accueil. Trois corrections de lisibilité
+   d'usage : la cible atteint 44 px de haut (elle en faisait 27), la
+   flèche pointe VERS le nom, et le survol dessine une pilule — la même
+   forme que le bouton Contact, au lieu d'un cercle qui jurait avec. */
 .nav__marque {
   font-family: var(--display); font-weight: 800;
   font-variation-settings: "wdth" 112;
   letter-spacing: -.035em; font-size: 1.05rem;
   color: var(--blanc); text-decoration: none; white-space: nowrap;
-  display: inline-flex; align-items: center; gap: .4rem;
+  display: inline-flex; align-items: center; gap: .45rem;
+  min-height: 44px; padding: .35rem .85rem .35rem .7rem;
+  margin-left: -.7rem;          /* le nom reste aligné sur la marge */
+  border-radius: 999px;
+  transition: background var(--t-base) var(--c-doux), color var(--t-vif) var(--c-doux);
+}
+.nav__marque:hover, .nav__marque:focus-visible {
+  background: rgb(238 236 131 / .14); color: var(--jaune);
 }
 /* indique que « Lila Narinx » ramène à l'accueil — sans ça, rien ne le
    distinguait d'un simple titre sur les pages de rubrique */
+/* nu, sans cercle : un indice, pas un bouton concurrent du nom */
 .nav__fleche {
-  display: grid; place-items: center;
-  width: 1.6em; aspect-ratio: 1; border-radius: 50%;
-  font-size: .9em; line-height: 1;
-  color: var(--jaune);
-  border: 1px solid rgb(238 236 131 / .45);
-  transition: background var(--t-vif) var(--c-doux), color var(--t-vif) var(--c-doux),
-              border-color var(--t-vif) var(--c-doux), transform var(--t-base) var(--c-sortie);
+  color: var(--jaune); font-size: .95em; line-height: 1;
+  transition: transform var(--t-base) var(--c-sortie);
 }
+/* au survol elle avance vers le nom : le geste dit « va là » */
 .nav__marque:hover .nav__fleche, .nav__marque:focus-visible .nav__fleche {
-  background: var(--jaune); color: var(--vert);
-  border-color: var(--jaune); transform: translateX(-3px);
+  transform: translateX(3px);
 }
-.nav__marque:hover { color: var(--jaune); }
+.visuellement-cache {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
 .nav__liens { display: flex; gap: 1.4rem; }
 .nav__liens a {
   font-size: .7rem; font-weight: 500; letter-spacing: .12em;

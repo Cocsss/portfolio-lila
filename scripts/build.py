@@ -242,7 +242,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <a class="saut-contenu" href="#contenu">Aller au contenu</a>
 
 <nav class="nav" aria-label="Navigation principale">
-  {f'<span class="nav__marque" aria-hidden="true" style="visibility:hidden">{e(I["nom"])}</span>' if classe == "page-accueil" else f'<a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true">←</span>{e(I["nom"])}</a>'}
+  {f'<span class="nav__marque" aria-hidden="true" style="visibility:hidden">{e(I["nom"])}</span>' if classe == "page-accueil" else f'<a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true">→</span><span class="nav__marque-nom">{e(I["nom"])}</span><span class="visuellement-cache"> — retour à l\'accueil</span></a>'}
   <div class="nav__liens" id="menu-principal">{liens}</div>
   <a class="nav__contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>
   <button class="nav__bascule" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Menu"><span></span><span></span></button>
