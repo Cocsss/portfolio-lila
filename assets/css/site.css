@@ -480,34 +480,6 @@ a { color: inherit; }
 .clip:fullscreen video, .clip:-webkit-full-screen video {
   object-fit: contain; background: #000; cursor: default;
 }
-.clip__son, .clip__agrandir {
-  position: absolute; top: .6rem; z-index: 3;
-  width: 34px; aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer; padding: 0;
-  background: rgb(var(--vert-rvb) / .6); color: var(--blanc);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  display: grid; place-items: center;
-  opacity: 0;
-  transition: opacity var(--t-base) var(--c-sortie), background var(--t-vif) var(--c-doux), color var(--t-vif) var(--c-doux);
-}
-.clip__son { right: .6rem; }
-.clip__agrandir { right: 3rem; }
-/* zone utile portée à 44 px sans agrandir le rond */
-.clip__son::before, .clip__agrandir::before { content: ""; position: absolute; inset: -5px; }
-.clip:hover .clip__son, .clip__son:focus-visible, .clip__son[aria-pressed="true"],
-.clip:hover .clip__agrandir, .clip__agrandir:focus-visible { opacity: 1; }
-.clip__son:hover, .clip__son[aria-pressed="true"], .clip__agrandir:hover { background: var(--jaune); color: var(--vert); }
-.clip__duree {
-  position: absolute; left: .6rem; bottom: .6rem; z-index: 3;
-  font-size: .64rem; font-weight: 600; letter-spacing: .06em; font-variant-numeric: tabular-nums;
-  color: var(--blanc); background: rgb(var(--vert-rvb) / .82);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  padding: .14rem .4rem; opacity: 0;
-  transition: opacity var(--t-base) var(--c-sortie);
-}
-.clip__duree:not(:empty) { opacity: 1; }
-/* lecture auto refusée ou mouvement réduit → contrôles natifs, pas de doublon */
-.clip--manuel .clip__son, .clip--manuel .clip__duree { display: none; }
-@media (hover: none) { .clip__son, .clip__agrandir { opacity: 1; } }
 
 /* ─── Précédent / suivant : de simples liens, sans cadre ────────── */
 .voisins {
@@ -532,10 +504,10 @@ a { color: inherit; }
    pas de rangées : rien ne vient rogner la place de l'image. */
 .boite {
   position: fixed; inset: 0; z-index: 300;
-  /* voile vert + flou de l'arrière-plan : la page reste devinée, jamais lisible */
-  background: rgb(var(--vert-rvb) / .86);
-  -webkit-backdrop-filter: blur(24px) saturate(.7);
-  backdrop-filter: blur(24px) saturate(.7);
+  /* Voile vert + flou : la page derrière est devinée, jamais lisible.
+     À .86 le flou ne se voyait pas (14 % du fond seulement) : .76 le
+     laisse lire comme un flou, blur(30px) interdit toute lecture. */
+  background: rgb(var(--vert-rvb) / .76);
   /* un seul enfant (.boite__scene) : on l'étire pour qu'il remplisse tout
      l'écran (comportement grid par défaut) — c'est LUI qui centre l'image
      avec son propre place-items. Un « place-items:center » posé ICI
@@ -548,6 +520,10 @@ a { color: inherit; }
 .boite.ouverte {
   opacity: 1; visibility: visible;
   transition: opacity var(--t-base) var(--c-doux), visibility 0s;
+  /* posé seulement à l'ouverture : un backdrop-filter permanent fait
+     recomposer le fond à chaque défilement, même visionneuse fermée */
+  -webkit-backdrop-filter: blur(30px) saturate(.75);
+  backdrop-filter: blur(30px) saturate(.75);
 }
 /* [hidden] doit l'emporter sur display:grid des commandes */
 .boite__fermer[hidden], .boite__fleche[hidden] { display: none; }
@@ -642,7 +618,7 @@ body.bloque { overflow: hidden; }
 }
 
 @media print {
-  .nav, .boite, .clip__son, .clip__duree, .voisins { display: none !important; }
+  .nav, .boite, .voisins { display: none !important; }
   body { background: #fff; color: #000; }
 }
 

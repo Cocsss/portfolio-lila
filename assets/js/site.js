@@ -21,7 +21,7 @@
   const BASE_VIDEO = EN_LOCAL
     ? 'assets/video/'
     : 'https://videos.corentindeville.com/Lila/';
-  const url = v => BASE_VIDEO + v.dataset.f + '.mp4';
+  const url = v => BASE_VIDEO + v.dataset.f + '.mp4' + (v.dataset.debut ? '#t=' + v.dataset.debut : '');
 
   /* ─────────────────────────────────────────────────────────────────
      2. Barre de navigation
@@ -96,12 +96,9 @@
      ───────────────────────────────────────────────────────────────── */
   const clips = $$('.clip');
   const MAX_SIMULTANE = 2;
-
-  const mmss = s => {
-    if (!isFinite(s)) return '';
-    const m = Math.floor(s / 60), r = Math.round(s % 60);
-    return `${m}:${String(r).padStart(2, '0')}`;
-  };
+  /* l'arbitre vit dans le bloc ci-dessous ; la visionneuse doit pouvoir
+     le rappeler quand elle se ferme, pour relancer la vidéo de la grille */
+  let reArbitrer = null;
 
   function charger(v) {
     if (v.querySelector('source')) return;
@@ -158,10 +155,10 @@
       arbitrer();
     }, { threshold: [0, .25, .5, .75, 1], rootMargin: '200px 0px' });
 
+    reArbitrer = arbitrer;   /* la visionneuse en a besoin à la fermeture */
+
     clips.forEach(clip => {
       const v = $('video', clip);
-      const son = $('.clip__son', clip);
-      const duree = $('.clip__duree', clip);
       if (!v) return;
 
       visibilite.set(clip, 0);
@@ -192,22 +189,26 @@
             InvalidStateError tant que les métadonnées ne sont pas là :
             on attend loadedmetadata si besoin (en général déjà chargées,
             la vidéo visible a été préparée par l'arbitre). */
-      const entrer = () => {
-        /* iPhone : pas d'API plein écran (document.fullscreenEnabled absent)
-           et la méthode Apple échoue dès que les métadonnées ne sont pas
-           là. On ouvre la vidéo dans la visionneuse du site, avec le son
-           et les contrôles : c'est fiable partout. */
-        if (!document.fullscreenEnabled || !v.requestFullscreen) {
-          clip.dispatchEvent(new CustomEvent('clip:engrand', { bubbles: true }));
-          return;
-        }
-        v.requestFullscreen().then(() => { enPleinEcran = true; }).catch(() => { natif(); });
+      const visionneuse = () => {
+        /* repli maison : on rend au clip son état de grille, la
+           visionneuse affiche sa propre copie de la vidéo */
+        v.muted = true;
+        if (!doux && !clip.classList.contains('clip--manuel')) v.controls = false;
+        clip.dispatchEvent(new CustomEvent('clip:engrand', { bubbles: true }));
       };
       const natif = () => {
-        if (!v.webkitEnterFullscreen) return;
-        const go = () => { try { v.webkitEnterFullscreen(); enPleinEcran = true; } catch (_) {} };
+        /* iPhone : seule la méthode Apple existe, et elle lève
+           InvalidStateError tant que les métadonnées ne sont pas là. */
+        if (!v.webkitEnterFullscreen) { visionneuse(); return; }
+        const go = () => { try { v.webkitEnterFullscreen(); enPleinEcran = true; } catch (_) { visionneuse(); } };
         if (v.readyState >= 1) go();
         else v.addEventListener('loadedmetadata', go, { once: true });
+      };
+      const entrer = () => {
+        if (!document.fullscreenEnabled || !v.requestFullscreen) { natif(); return; }
+        /* en cas de refus (politique de permissions, geste jugé absent),
+           on ne laisse SURTOUT pas le clip avec son et contrôles : repli */
+        v.requestFullscreen().then(() => { enPleinEcran = true; }).catch(natif);
       };
       const enGrand = () => {
         clip.dataset.gele = '0';
@@ -240,36 +241,6 @@
         if (ev.key === ' ')     { ev.preventDefault(); basculer(); }
       });
 
-      if (duree) {
-        v.addEventListener('loadedmetadata', () => { duree.textContent = mmss(v.duration); });
-      }
-
-      const agrandir = $('.clip__agrandir', clip);
-      if (agrandir) {
-        agrandir.addEventListener('click', ev => { ev.stopPropagation(); enGrand(); });
-      }
-
-      if (son) {
-        const dessine = () => {
-          son.classList.toggle('clip__son--muet', v.muted);
-          son.setAttribute('aria-pressed', String(!v.muted));
-        };
-        son.setAttribute('aria-label', 'Son : ' + (v.getAttribute('aria-label') || 'vidéo'));
-        dessine();
-        son.addEventListener('click', ev => {
-          ev.stopPropagation();
-          if (v.muted) {                      /* une seule vidéo sonore à la fois */
-            clips.forEach(autre => {
-              const av = $('video', autre);
-              if (av && av !== v) av.muted = true;
-            });
-          }
-          v.muted = !v.muted;                 /* volumechange déclenchera le redessin */
-          if (!v.muted) clip.dataset.gele = '0';
-          if (clip.dataset.gele !== '1') v.play().catch(() => {});
-        });
-        v.addEventListener('volumechange', dessine);
-      }
     });
   }
 
@@ -332,7 +303,12 @@
     boite.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('bloque');
     const vid = $('video', scene);
-    if (vid) { vid.pause(); vid.removeAttribute('src'); vid.load(); }
+    if (vid) {
+      vid.pause(); vid.removeAttribute('src'); vid.load();
+      /* la vidéo de la grille avait été mise en pause à l'ouverture :
+         sans ça elle restait figée, l'observateur ne refranchit aucun seuil */
+      if (reArbitrer) reArbitrer();
+    }
     boite.addEventListener('transitionend', viderSiFerme);
     if (declencheur) { declencheur.focus(); declencheur = null; }
   }
@@ -384,7 +360,9 @@
     if (e.key === 'ArrowRight') { glisser(1); return; }
     if (e.key === 'Tab') {
       /* vrai piège de focus : on tourne entre les commandes visibles */
-      const cibles = [fermer, prec, suiv].filter(b => !b.hidden);
+      /* la vidéo en fait partie : sinon ses contrôles natifs étaient
+         inatteignables au clavier, le piège ne tournant qu'entre les boutons */
+      const cibles = [fermer, prec, suiv, $('video', scene)].filter(b => b && !b.hidden);
       const k = cibles.indexOf(document.activeElement);
       const vers = e.shiftKey
         ? cibles[(k - 1 + cibles.length) % cibles.length]
@@ -399,7 +377,9 @@
   scene.addEventListener('touchend', e => {
     if (x0 === null) return;
     const d = e.changedTouches[0].clientX - x0;
-    if (Math.abs(d) > 48) { glisse = true; glisser(d < 0 ? 1 : -1); }
+    /* en mode vidéo le lot est vide : ne pas armer « glisse », sinon le
+       tap suivant hors de la vidéo ne fermait plus la visionneuse */
+    if (Math.abs(d) > 48 && lot.length) { glisse = true; glisser(d < 0 ? 1 : -1); }
     x0 = null;
   }, { passive: true });
 })();

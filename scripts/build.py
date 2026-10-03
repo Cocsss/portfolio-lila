@@ -124,13 +124,15 @@ def media_html(m, titre_prod, span, pos=0):
     poster = POSTERS / f"{f}.webp"
     pw, ph = taille(poster) if poster.exists() else (9, 16)
     att_poster = f' poster="{poster.as_posix()}"' if poster.exists() else ""
+    att_debut = f' data-debut="{m["debut"]}"' if m.get("debut") else ""
     large = " large" if (pw / ph) >= 1.2 or span >= 4 else ""
     return (
         f'<div class="clip monte{large}" style="--r:{pw}/{ph};--s:{span}">'
-        f'<video data-f="{e(f)}"{att_poster} muted loop playsinline preload="none" '
+        f'<video data-f="{e(f)}"{att_debut}{att_poster} muted loop playsinline preload="none" '
         f'width="{pw}" height="{ph}" tabindex="0" aria-label="{e(titre_prod)}"></video>'
-        # pas de bouton son ni agrandir : un clic sur la vidéo fait les deux
-        f'<span class="clip__duree" aria-hidden="true"></span></div>'
+        # aucune surcouche : ni bouton son, ni agrandir, ni durée.
+        # Un clic sur la vidéo l'ouvre en grand, avec le son.
+        f'</div>'
     )
 
 
@@ -239,7 +241,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 </main>
 
 <footer class="pied">
-  <a class="pied__nom" href="#contenu">{e(I['nom'])}
+  <a class="pied__nom" href="index.html">{e(I['nom'])}
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </a>
   <p class="pied__coord">

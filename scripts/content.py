@@ -67,8 +67,17 @@ def img(*nums):
 
 
 def vid(*noms):
-    """Déclare des vidéos par leur nom de fichier (sans extension)."""
-    return [{"type": "video", "f": n} for n in noms]
+    """Déclare des vidéos par leur nom de fichier (sans extension).
+    « nom:12 » démarre la lecture à 12 secondes (fragment média #t=12,
+    standard HTML5 — pas de retouche du fichier)."""
+    out = []
+    for n in noms:
+        nom, _, debut = n.partition(":")
+        d = {"type": "video", "f": nom}
+        if debut:
+            d["debut"] = int(debut)
+        out.append(d)
+    return out
 
 
 RUBRIQUES = [
@@ -218,7 +227,7 @@ RUBRIQUES = [
             {
                 "titre": "Contenu vidéo reportage sur l’artiste bruxellois « Spear », réalisé dans le cadre d’un cours de vidéo à l’IHECS",
                 "ressources": "Contenu « projet final SPEAR »",
-                "medias": vid("projet-spear"),
+                "medias": vid("projet-spear:13"),
                 "cols": 1,
             },
             {
