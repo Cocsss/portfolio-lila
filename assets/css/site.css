@@ -457,17 +457,6 @@ a { color: inherit; }
 }
 .vignette img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--t-ample) var(--c-sortie); }
 .vignette:hover img, .vignette:focus-visible img { transform: scale(1.04); }
-.prod__medias { counter-reset: v; }
-.vignette { counter-increment: v; }
-.vignette::after {
-  content: counter(v, decimal-leading-zero);
-  position: absolute; left: .6rem; bottom: .55rem;
-  font-size: .62rem; font-weight: 600; letter-spacing: .1em;
-  color: var(--vert); background: var(--jaune); padding: .15rem .4rem;
-  opacity: 0; transform: translateY(4px);
-  transition: opacity var(--t-base) var(--c-sortie), transform var(--t-base) var(--c-sortie);
-}
-.vignette:hover::after, .vignette:focus-visible::after { opacity: 1; transform: none; }
 .vignette--contenir img { object-fit: contain; }
 .vignette--contenir { background: rgba(246,243,234,.04); }
 
