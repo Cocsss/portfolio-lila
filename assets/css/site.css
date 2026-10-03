@@ -212,11 +212,21 @@ a { color: inherit; }
     letter-spacing: -.03em; text-transform: none;
     color: var(--vert);
     padding: .75rem 0;
-    border-bottom: 1px solid rgb(var(--vert-rvb) / .22);
+    border-bottom: 1px solid rgb(var(--vert-rvb) / .5);
   }
   .nav__liens a:last-child { border-bottom: 0; }
   .nav__liens a:hover { opacity: .6; }
-  .nav__liens a[aria-current="page"] { color: var(--vert); border-bottom-width: 3px; border-bottom-color: var(--vert); }
+  .nav__liens a[aria-current="page"] {
+    color: var(--vert);
+    border-bottom: 3px solid var(--vert);
+    padding-left: .9rem;
+  }
+  .nav__liens a[aria-current="page"]::before {
+    content: ""; position: absolute; left: 0; top: 50%;
+    width: .42rem; height: .42rem; margin-top: -.21rem;
+    background: var(--vert); border-radius: 50%;
+  }
+  .nav__liens a { position: relative; transition: padding-left var(--t-vif) var(--c-doux); }
 }
 /* en paysage, tout doit tenir */
 @media (max-width: 1180px) and (max-height: 560px) {
@@ -254,11 +264,11 @@ a { color: inherit; }
   font-size: clamp(1.9rem, 3.9vw, 3.9rem);
   color: var(--blanc);
   margin-bottom: clamp(1.6rem, 3vw, 2.6rem);
-  max-width: 22ch;
+  max-width: none;
 }
 .presentation__texte {
   font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.6;
-  color: var(--blanc-70); max-width: 52ch; margin: 0;
+  color: var(--blanc-70); max-width: 80ch; margin: 0;
 }
 
 /* ═══ INDEX DES RUBRIQUES (accueil) ═══════════════════════════════ */
@@ -274,46 +284,50 @@ a { color: inherit; }
 @media (max-width: 720px)  { .index { grid-template-columns: repeat(2, 1fr); } }
 
 .tuile {
-  position: relative; display: block; overflow: hidden;
-  aspect-ratio: 4 / 5; text-decoration: none;
-  background: var(--vert-jour);
+  display: block; text-decoration: none;
+  background: var(--jaune);          /* le bandeau sous l'image */
+}
+.tuile__visuel {
+  display: block; overflow: hidden;
+  aspect-ratio: 4 / 5; background: var(--vert-jour);
 }
 .tuile img {
   width: 100%; height: 100%; object-fit: cover;
   object-position: 50% 25%;
   transition: transform var(--t-ample) var(--c-sortie);
 }
-.tuile:hover img, .tuile:focus-visible img { transform: scale(1.06); filter: saturate(1); }
-.tuile::after {
-  content: ""; position: absolute; inset: 0;
-  /* ancré en rem, pas en % : le texte occupe au plus 4,47rem depuis le bas
-     à TOUTES les largeurs — en %, il sortait du voile dès que la tuile
-     rétrécissait (pire cas mesuré : 1,19:1 sur mobile). */
-  background: linear-gradient(to top,
-    rgb(var(--vert-rvb) / .97) 0,
-    rgb(var(--vert-rvb) / .92) 4.8rem,
-    rgb(var(--vert-rvb) / 0)   7rem);
-}
+.tuile:hover img, .tuile:focus-visible img { transform: scale(1.06); }
+
+/* Le titre n'est plus posé SUR la photo : il descend sur un bandeau
+   jaune, en vert. Lisible partout (6,08:1), quel que soit le visuel —
+   un vert posé sur l'image serait invisible. */
 .tuile__corps {
-  position: absolute; left: .9rem; right: .9rem; bottom: .85rem; z-index: 2;
-  display: flex; flex-direction: column; align-items: flex-start; gap: .35rem;
+  display: flex; align-items: baseline; justify-content: space-between; gap: .4rem;
+  padding: .7rem .85rem .8rem;
+}
+.tuile__fleche {
+  font-size: 1rem; color: var(--vert); opacity: .55; flex-shrink: 0;
+  transition: opacity var(--t-vif) var(--c-sortie), transform var(--t-vif) var(--c-sortie);
+}
+.tuile:hover .tuile__fleche, .tuile:focus-visible .tuile__fleche {
+  opacity: 1; transform: translate(2px, -2px);
 }
 .tuile__titre {
   font-family: var(--display); font-weight: 800;
   font-variation-settings: "wdth" 105;
-  font-size: clamp(1.15rem, 1.8vw, 1.7rem);
-  letter-spacing: -.035em; line-height: .96;
-  color: var(--jaune); text-wrap: balance;
-}
-.tuile__compte {
-  font-size: .66rem; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--blanc-70); white-space: nowrap; flex: none;
+  font-size: clamp(1.05rem, 1.6vw, 1.5rem);
+  letter-spacing: -.035em; line-height: .98;
+  color: var(--vert); text-wrap: balance;
+  display: block;
 }
 
 /* ═══ CONTACT : une fiche ═════════════════════════════════════════ */
 .contact { border-top: 1px solid var(--trait); }
 .contact--page { border-top: 0; min-height: 100svh; display: grid; align-content: center; padding-top: calc(var(--marge) + 5rem); }
-@media (min-width: 1181px) { .nav__lien-contact { display: none; } }
+/* Sur ordinateur, « Accueil » et « Contact » font doublon : la marque en
+   haut à gauche ramène déjà à l'accueil, et le bouton Contact est à droite.
+   Ces deux entrées ne servent que dans le menu burger. */
+@media (min-width: 1181px) { .nav__lien-contact, .nav__lien-accueil { display: none; } }
 .fiche {
   background: transparent;   /* les filets structurent déjà la fiche */
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -404,6 +418,18 @@ a { color: inherit; }
 }
 .prod__note strong { color: var(--jaune); font-weight: 600; }
 .prod__ress { margin-top: 1.3rem; }
+.prod__liens { margin: 1.2rem 0 0; display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; }
+.prod__liens a {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-family: var(--display); font-weight: 600; font-size: .95rem;
+  color: var(--jaune); text-decoration: none;
+  border-bottom: 1px solid rgb(238 236 131 / .45);
+  padding-bottom: .12rem;
+  transition: color var(--t-vif) var(--c-doux), border-color var(--t-vif) var(--c-doux);
+}
+.prod__liens a:hover { color: var(--blanc); border-bottom-color: var(--blanc); }
+.prod__liens svg { transition: transform var(--t-base) var(--c-sortie); }
+.prod__liens a:hover svg { transform: translate(2px, -2px); }
 .prod__suite { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
 .prod__suite .prod__para { color: var(--blanc); font-weight: 500; }
 

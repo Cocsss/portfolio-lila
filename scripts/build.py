@@ -30,13 +30,13 @@ POSTERS = IMG / "posters"
 # Visuel de couverture de chaque page (numéro du brief, ou poster vidéo).
 COUVERTURES = {
     "accueil": IMG / "42.webp",
-    "campagne-360": IMG / "56.webp",
-    "reseaux-sociaux": IMG / "15.webp",
-    "sites-web": IMG / "33.webp",
+    "campagne-360": IMG / "76.webp",   # la mise en situation plutôt qu'une page de dossier
+    "reseaux-sociaux": IMG / "79.webp",
+    "sites-web": IMG / "75.webp",     # mockup Veyras : plus lisible qu'une capture rognée
     "photo": IMG / "40.webp",
     "video": POSTERS / "reel-cuisine-gazzosa.webp",
-    "redaction": IMG / "51.webp",
-    "graphisme": IMG / "61.webp",
+    "redaction": IMG / "94.webp",
+    "graphisme": IMG / "92.webp",
     "intelligence-artificielle": IMG / "71.webp",
 }
 
@@ -173,6 +173,14 @@ def production_html(p, i):
             g.append(f'<p class="prod__para">{e(p[cle])}</p>')
     if p.get("note"):
         g.append(f'<p class="prod__note"><strong>Confidentiel.</strong> {e(p["note"])}</p>')
+    if p.get("liens"):
+        g.append('<p class="prod__liens">')
+        for libelle, href in p["liens"]:
+            g.append(
+                f'<a href="{e(href)}" target="_blank" rel="noopener noreferrer">{e(libelle)}'
+                f'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+                f'stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>')
+        g.append("</p>")
     g.append("</div>")
     g.append('<div class="prod__medias">')
     nb = sum(1 for m in p["medias"] if m["type"] == "image")
@@ -190,7 +198,8 @@ def production_html(p, i):
 # ─────────────────────────────────────────────────────────────────────
 def coquille(titre_onglet, description, corps, actif=None, classe=""):
     I = C.IDENTITE
-    liens = "".join(
+    liens = f'<a class="nav__lien-accueil" href="index.html"{" aria-current=\"page\"" if classe == "page-accueil" else ""}>Accueil</a>'
+    liens += "".join(
         f'<a href="{page_de(r)}"' + (' aria-current="page"' if r["id"] == actif else "")
         + f'>{e(r["titre"])}</a>' for r in C.RUBRIQUES)
     liens += f'<a class="nav__lien-contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>'
@@ -206,7 +215,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <meta property="og:type" content="website">
 <meta property="og:title" content="{e(titre_onglet)}">
 <meta property="og:description" content="{e(description)}">
-<meta property="og:image" content="https://{e(I['domaine'])}/assets/img/42.webp">
+<meta property="og:image" content="https://{e(I['domaine'])}/assets/img/76.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%235b5617'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='Helvetica,Arial' font-weight='bold' font-size='54' fill='%23eeec83'>L</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -278,9 +287,9 @@ def accueil():
     reperes = "".join(f"<div><dt>{e(t)}</dt><dd>{e(d)}</dd></div>" for t, d in C.REPERES)
     tuiles = "".join(
         f'<a class="tuile monte" href="{page_de(r)}">'
+        + '<span class="tuile__visuel">'
         + img_tag(COUVERTURES[r["id"]], "", loading="lazy", decoding="async")
-        + f'<span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span>'
-        f'<span class="tuile__compte">{compte_medias(r)} contenus</span></span></a>'
+        + f'</span><span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a>'
         for i, r in enumerate(C.RUBRIQUES))
 
     corps = f"""
@@ -295,8 +304,7 @@ def accueil():
 
   <section class="bloc" id="presentation" aria-label="{e(C.PRESENTATION['titre'])}">
     <div class="dedans">
-      <div class="monte">
-        <p class="etq" style="margin-bottom:1.4rem">{e(C.PRESENTATION['titre'])}</p>
+      <div class="presentation__bloc monte">
         <h2 class="condense presentation__phrase">{phrase_html}</h2>
         <p class="presentation__texte">{e(reste)}</p>
       </div>
@@ -305,9 +313,6 @@ def accueil():
 
   <section class="bloc" id="productions" aria-label="{e(C.TITRE_PRODUCTIONS)}" style="padding-top:0">
     <div class="dedans">
-      <div class="index__tete monte">
-        <p class="etq">{e(C.TITRE_PRODUCTIONS)}</p>
-      </div>
       <div class="index">{tuiles}</div>
     </div>
   </section>

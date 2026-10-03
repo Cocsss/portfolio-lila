@@ -64,3 +64,10 @@ __pycache__/
 
 # Dossier de dépôt (les fichiers sont traités puis rangés dans media/)
 _DEPOSER-ICI/
+
+# Gabarits PSD du commerce (~1 Go) — outils de mockup, restent sur le Mac.
+# Trop lourds pour GitHub ; le rendu généré va dans assets/img/.
+psd/
+
+# Document de reprise interne (notes sur le client) — reste sur le Mac.
+CLAUDE.md

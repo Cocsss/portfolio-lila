@@ -89,7 +89,8 @@ RUBRIQUES = [
             ),
             "note": CONFIDENTIEL,
             "ressources": "Contenus 1 à 8",
-            "medias": img(1, 2, 3, 4, 5, 6, 7, 8),
+            # 76 = mise en situation carrée (affiche 57 + story extraite de la page 6)
+            "medias": img(76, 1, 2, 3, 4, 5, 6, 7, 8),
             "cols": 4,
         }],
     },
@@ -109,7 +110,8 @@ RUBRIQUES = [
                     "que des vues d’ensemble des feeds que j’ai mis en place."
                 ),
                 "ressources": "Contenus 9 à 20",
-                "medias": img(9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                # 79 = mise en situation (iPhone en main, compte FightClub)
+                "medias": img(79, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
                 "cols": 4,
             },
             {
@@ -150,7 +152,10 @@ RUBRIQUES = [
         "productions": [{
             "titre": "Sites web rebrandés et redesignés pour mes clients Miège et Veyras",
             "ressources": "Contenus 33 à 38",
-            "medias": img(33, 34, 35, 36, 37, 38),
+            # 75 = mise en situation du site Veyras sur MacBook
+            # liens vers les sites en ligne (le mockup n'est qu'une image)
+            "liens": [("Voir le site Miège", "https://www.miege.be")],
+            "medias": img(75, 33, 34, 35, 36, 37, 38),
             "cols": 2,
         }],
     },
@@ -280,7 +285,8 @@ RUBRIQUES = [
                     "qui vous sont partagées."
                 ),
                 "ressources": "Contenus 56 à 58",
-                "medias": img(56, 57, 58),
+                # 77 = l'affiche en situation sur un panneau
+                "medias": img(77, 56, 57, 58),
                 "cols": 3,
                 # bloc secondaire rattaché à la même production (non souligné
                 # dans le docx) :
