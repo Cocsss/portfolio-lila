@@ -356,6 +356,8 @@ RUBRIQUES = [
             "ressources": "Contenus 69 à 74",
             "medias": img(69, 70, 71, 72, 73, 74),
             "cols": 3,
+            # série homogène : grille régulière plutôt que collage éditorial
+            "grille": True,
         }],
     },
 ]

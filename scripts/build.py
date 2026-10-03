@@ -143,9 +143,21 @@ def dims(m):
     return taille(p) if p.exists() else (9, 16)
 
 
-def collage_html(medias, titre_prod, depart=0):
+def collage_html(medias, titre_prod, depart=0, grille=False):
     if not medias:
         return ""
+    # « grille » : toutes les vignettes au même format, rangées alignées.
+    # Pour une série homogène (6 visuels d'un même projet), le collage
+    # éditorial produisait des décalages de 140 à 165 px entre voisines.
+    if grille:
+        tuiles, pos = [], depart
+        for m in medias:
+            suivant = pos + 1 if m["type"] == "image" else pos
+            t = media_html(m, titre_prod, 2, suivant)
+            if t:
+                tuiles.append(t)
+                pos = suivant
+        return f'<div class="collage collage--grille">{"".join(tuiles)}</div>'
     fams = [famille(*dims(m)) for m in medias]
     tuiles, pos = [], depart
     for i, m in enumerate(medias):
@@ -186,7 +198,7 @@ def production_html(p, i):
     g.append("</div>")
     g.append('<div class="prod__medias">')
     nb = sum(1 for m in p["medias"] if m["type"] == "image")
-    g.append(collage_html(p["medias"], p["titre"]))
+    g.append(collage_html(p["medias"], p["titre"], grille=p.get("grille", False)))
     s = p.get("suite")
     if s:
         g.append('<div class="prod__suite">')

@@ -137,14 +137,19 @@ a { color: inherit; }
 /* indique que « Lila Narinx » ramène à l'accueil — sans ça, rien ne le
    distinguait d'un simple titre sur les pages de rubrique */
 .nav__fleche {
-  display: inline-block; font-size: .85em;
-  opacity: .6; transform: translateX(2px);
-  transition: opacity var(--t-vif) var(--c-doux), transform var(--t-vif) var(--c-doux);
+  display: grid; place-items: center;
+  width: 1.6em; aspect-ratio: 1; border-radius: 50%;
+  font-size: .9em; line-height: 1;
+  color: var(--jaune);
+  border: 1px solid rgb(238 236 131 / .45);
+  transition: background var(--t-vif) var(--c-doux), color var(--t-vif) var(--c-doux),
+              border-color var(--t-vif) var(--c-doux), transform var(--t-base) var(--c-sortie);
 }
 .nav__marque:hover .nav__fleche, .nav__marque:focus-visible .nav__fleche {
-  opacity: 1; transform: translateX(-2px);
+  background: var(--jaune); color: var(--vert);
+  border-color: var(--jaune); transform: translateX(-3px);
 }
-@media (hover: none) { .nav__fleche { opacity: .75; } }
+.nav__marque:hover { color: var(--jaune); }
 .nav__liens { display: flex; gap: 1.4rem; }
 .nav__liens a {
   font-size: .7rem; font-weight: 500; letter-spacing: .12em;
@@ -495,6 +500,15 @@ a { color: inherit; }
   gap: clamp(.6rem, 1.2vw, 1.2rem);
 }
 .collage > * { grid-column: span var(--s, 2); }
+/* Grille régulière : même format pour toutes, rangées alignées.
+   « > .vignette » et pas « > * » : à spécificité égale, la règle
+   .vignette (plus bas dans le fichier) l'emportait et gardait le
+   format d'origine de chaque image. */
+.collage--grille > .vignette { grid-column: span 2; aspect-ratio: 4 / 5; }
+.collage--grille .vignette img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 720px) {
+  .collage--grille > .vignette { grid-column: span 1; }
+}
 @media (max-width: 720px) {
   .collage { grid-template-columns: repeat(2, 1fr); }
   .collage > * { grid-column: span 1; }
