@@ -129,10 +129,7 @@ def media_html(m, titre_prod, span, pos=0):
         f'<div class="clip monte{large}" style="--r:{pw}/{ph};--s:{span}">'
         f'<video data-f="{e(f)}"{att_poster} muted loop playsinline preload="none" '
         f'width="{pw}" height="{ph}" tabindex="0" aria-label="{e(titre_prod)}"></video>'
-        f'<button class="clip__son" type="button" aria-label="Activer le son"></button>'
-        f'<button class="clip__agrandir" type="button" aria-label="Agrandir la vidéo">'
-        f'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">'
-        f'<path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></button>'
+        # pas de bouton son ni agrandir : un clic sur la vidéo fait les deux
         f'<span class="clip__duree" aria-hidden="true"></span></div>'
     )
 

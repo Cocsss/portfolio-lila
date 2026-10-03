@@ -531,7 +531,11 @@ a { color: inherit; }
    (fermer, flèches, légende) flottent par-dessus, discrètes. Pas de barre,
    pas de rangées : rien ne vient rogner la place de l'image. */
 .boite {
-  position: fixed; inset: 0; z-index: 300; background: rgb(var(--vert-rvb) / .96);
+  position: fixed; inset: 0; z-index: 300;
+  /* voile vert + flou de l'arrière-plan : la page reste devinée, jamais lisible */
+  background: rgb(var(--vert-rvb) / .86);
+  -webkit-backdrop-filter: blur(24px) saturate(.7);
+  backdrop-filter: blur(24px) saturate(.7);
   /* un seul enfant (.boite__scene) : on l'étire pour qu'il remplisse tout
      l'écran (comportement grid par défaut) — c'est LUI qui centre l'image
      avec son propre place-items. Un « place-items:center » posé ICI
@@ -563,9 +567,12 @@ a { color: inherit; }
 /* vidéo en grand (téléphone) : toute la hauteur utile, largeur selon le
    format d'origine ; un reel 9/16 remplit l'écran, un 16/9 est letterboxé */
 .boite__scene video {
-  height: calc(100vh - clamp(7rem, 16vh, 10rem));
-  width: auto; max-width: 100%;
-  background: #000; border-radius: 4px;
+  max-width: 100%;
+  max-height: calc(100vh - clamp(7rem, 16vh, 10rem));
+  width: auto; height: auto;
+  border-radius: 4px;
+  /* pas de hauteur forcée ni de fond : la boîte épouse la vidéo, sinon un
+     reel 9/16 flottait dans un rectangle noir plus haut que lui */
 }
 .boite__scene img {
   max-width: 100%;
