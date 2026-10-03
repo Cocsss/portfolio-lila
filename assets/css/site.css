@@ -560,6 +560,13 @@ a { color: inherit; }
    donc son enfant ne « stretch » pas — la hauteur de la piste grid reste
    « auto » (dépend du contenu), ce qui rend tout % de hauteur indéterminé
    (boucle de résolution). Un vh ne dépend pas de la grille : pas de boucle. */
+/* vidéo en grand (téléphone) : toute la hauteur utile, largeur selon le
+   format d'origine ; un reel 9/16 remplit l'écran, un 16/9 est letterboxé */
+.boite__scene video {
+  height: calc(100vh - clamp(7rem, 16vh, 10rem));
+  width: auto; max-width: 100%;
+  background: #000; border-radius: 4px;
+}
 .boite__scene img {
   max-width: 100%;
   max-height: calc(100vh - clamp(7rem, 16vh, 10rem));

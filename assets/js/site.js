@@ -193,9 +193,15 @@
             on attend loadedmetadata si besoin (en général déjà chargées,
             la vidéo visible a été préparée par l'arbitre). */
       const entrer = () => {
-        if (v.requestFullscreen) {
-          v.requestFullscreen().then(() => { enPleinEcran = true; }).catch(() => { natif(); });
-        } else natif();
+        /* iPhone : pas d'API plein écran (document.fullscreenEnabled absent)
+           et la méthode Apple échoue dès que les métadonnées ne sont pas
+           là. On ouvre la vidéo dans la visionneuse du site, avec le son
+           et les contrôles : c'est fiable partout. */
+        if (!document.fullscreenEnabled || !v.requestFullscreen) {
+          clip.dispatchEvent(new CustomEvent('clip:engrand', { bubbles: true }));
+          return;
+        }
+        v.requestFullscreen().then(() => { enPleinEcran = true; }).catch(() => { natif(); });
       };
       const natif = () => {
         if (!v.webkitEnterFullscreen) return;
@@ -325,11 +331,36 @@
     boite.classList.remove('ouverte');
     boite.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('bloque');
+    const vid = $('video', scene);
+    if (vid) { vid.pause(); vid.removeAttribute('src'); vid.load(); }
     boite.addEventListener('transitionend', viderSiFerme);
     if (declencheur) { declencheur.focus(); declencheur = null; }
   }
 
-  const glisser = n => { i = (i + n + lot.length) % lot.length; peindre(); };
+  /* Vidéo en grand (téléphone) : la visionneuse reçoit une copie de la
+     vidéo, avec le son et les contrôles natifs. La vidéo de la grille
+     est mise en pause ; l'arbitre la relance à la fermeture. */
+  document.addEventListener('clip:engrand', ev => {
+    const clip = ev.target, v = $('video', clip);
+    if (!v) return;
+    v.pause(); v.muted = true;
+    const grand = document.createElement('video');
+    grand.src = url(v);
+    grand.controls = true; grand.playsInline = true; grand.setAttribute('playsinline', '');
+    grand.preload = 'auto';
+    grand.setAttribute('aria-label', v.getAttribute('aria-label') || 'Vidéo');
+    lot = []; declencheur = v; glisse = false;
+    boite.removeEventListener('transitionend', viderSiFerme);
+    scene.replaceChildren(grand);
+    legende.textContent = v.getAttribute('aria-label') || '';
+    prec.hidden = suiv.hidden = true;
+    boite.classList.add('ouverte');
+    boite.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('bloque');
+    grand.play().catch(() => {});   /* dans le geste du clic : le son passe */
+  });
+
+  const glisser = n => { if (!lot.length) return; i = (i + n + lot.length) % lot.length; peindre(); };
 
   $$('.vignette[data-plein]').forEach(el =>
     el.addEventListener('click', () => ouvrir(el))
@@ -341,7 +372,7 @@
   /* l'<img> absorbait le clic : la visionneuse restait ouverte */
   boite.addEventListener('click', e => {
     if (glisse) { glisse = false; return; }
-    if (e.target.closest('.boite__barre, .boite__fleche')) return;
+    if (e.target.closest('.boite__barre, .boite__fleche, video')) return;
     clore();
   });
 
