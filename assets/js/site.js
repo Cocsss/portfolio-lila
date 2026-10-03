@@ -110,6 +110,19 @@
     v.load();
   }
 
+  /* ─────────────────────────────────────────────────────────────────
+     3 bis. Tuile Vidéo de l'accueil : un reel joue en couverture.
+     Décorative, dans un <a> qui navigue déjà vers la page — pas de
+     clic-pour-agrandir ici, juste charger + lire quand elle apparaît.
+     ───────────────────────────────────────────────────────────────── */
+  const tuileVideo = $('.tuile__video');
+  if (tuileVideo && !doux) {
+    const lancer = () => { charger(tuileVideo); tuileVideo.play().catch(() => {}); };
+    new IntersectionObserver((entrees, obs) => {
+      if (entrees[0].isIntersecting) { lancer(); obs.disconnect(); }
+    }, { rootMargin: '200px 0px' }).observe(tuileVideo);
+  }
+
   function decharger(v) {
     if (!v.querySelector('source')) return;
     v.pause();

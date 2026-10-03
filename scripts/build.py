@@ -34,7 +34,7 @@ COUVERTURES = {
     "reseaux-sociaux": IMG / "79.webp",
     "sites-web": IMG / "75.webp",     # mockup Veyras : plus lisible qu'une capture rognée
     "photo": IMG / "40.webp",
-    "video": POSTERS / "reel-cuisine-gazzosa.webp",
+    "video": POSTERS / "mockup-iphone-poche.webp",   # repli si la vidéo ne charge pas
     "redaction": IMG / "94.webp",
     "graphisme": IMG / "92.webp",
     "intelligence-artificielle": IMG / "96.webp",
@@ -230,7 +230,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <a class="saut-contenu" href="#contenu">Aller au contenu</a>
 
 <nav class="nav" aria-label="Navigation principale">
-  {f'<span class="nav__marque" aria-hidden="true" style="visibility:hidden">{e(I["nom"])}</span>' if classe == "page-accueil" else f'<a class="nav__marque" href="index.html">{e(I["nom"])}</a>'}
+  {f'<span class="nav__marque" aria-hidden="true" style="visibility:hidden">{e(I["nom"])}</span>' if classe == "page-accueil" else f'<a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true">←</span>{e(I["nom"])}</a>'}
   <div class="nav__liens" id="menu-principal">{liens}</div>
   <a class="nav__contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>
   <button class="nav__bascule" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Menu"><span></span><span></span></button>
@@ -286,10 +286,25 @@ def accueil():
     phrase_html = e(phrase).replace(cle, f"<em>{cle}</em>", 1)
 
     reperes = "".join(f"<div><dt>{e(t)}</dt><dd>{e(d)}</dd></div>" for t, d in C.REPERES)
+
+    def visuel_tuile(r):
+        # la tuile Vidéo joue un reel, muet et en boucle, comme dans les
+        # rubriques — mais sans le clic-pour-agrandir : ici le clic doit
+        # ouvrir la rubrique (le <a> englobant), pas la visionneuse.
+        if r["id"] == "video":
+            poster = COUVERTURES["video"]
+            pw, ph = taille(poster) if poster.exists() else (4, 5)
+            return (
+                f'<video class="tuile__video" data-f="mockup-iphone-poche" '
+                f'poster="{poster.as_posix()}" muted loop playsinline preload="none" '
+                f'width="{pw}" height="{ph}" aria-hidden="true"></video>'
+            )
+        return img_tag(COUVERTURES[r["id"]], "", loading="lazy", decoding="async")
+
     tuiles = "".join(
         f'<a class="tuile monte" href="{page_de(r)}">'
         + '<span class="tuile__visuel">'
-        + img_tag(COUVERTURES[r["id"]], "", loading="lazy", decoding="async")
+        + visuel_tuile(r)
         + f'</span><span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a>'
         for i, r in enumerate(C.RUBRIQUES))
 
@@ -353,16 +368,22 @@ def page_contact():
   <section class="bloc contact contact--page" aria-label="Contact">
     <div class="dedans">
       <div class="fiche monte">
-        <div class="fiche__tete">
-          <p class="etq">Contact</p>
-          <p class="fiche__nom">{e(I['nom'])}</p>
-          <p class="fiche__role">{e(I['role'])}</p>
+        <p class="etq">Contact</p>
+        <p class="fiche__nom">{e(I['nom'])}</p>
+        <p class="fiche__role">{e(I['role'])}</p>
+        <div class="fiche__liens">
+          <a class="lien-contact" href="mailto:{e(I['email'])}">
+            <span class="lien-contact__quoi">Écrire un mail</span>
+            <span class="lien-contact__valeur">{e(I['email'])}</span>
+            <span class="lien-contact__fleche" aria-hidden="true">↗</span>
+          </a>
+          <a class="lien-contact" href="tel:{e(I['tel_lien'])}">
+            <span class="lien-contact__quoi">Appeler</span>
+            <span class="lien-contact__valeur">{e(I['tel'])}</span>
+            <span class="lien-contact__fleche" aria-hidden="true">↗</span>
+          </a>
+          {('<a class="lien-contact" href="' + e(I['linkedin']) + '" target="_blank" rel="noopener"><span class="lien-contact__quoi">LinkedIn</span><span class="lien-contact__valeur">Voir le profil</span><span class="lien-contact__fleche" aria-hidden="true">↗</span></a>') if I.get('linkedin') else ''}
         </div>
-        <dl class="fiche__liste">
-          <div><dt>Email</dt><dd><a href="mailto:{e(I['email'])}">{e(I['email'])}</a></dd></div>
-          <div><dt>Téléphone</dt><dd><a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a></dd></div>
-          {('<div><dt>LinkedIn</dt><dd><a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">Voir le profil</a></dd></div>') if I.get('linkedin') else ''}
-        </dl>
       </div>
     </div>
   </section>

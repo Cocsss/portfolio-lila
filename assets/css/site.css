@@ -132,7 +132,19 @@ a { color: inherit; }
   font-variation-settings: "wdth" 112;
   letter-spacing: -.035em; font-size: 1.05rem;
   color: var(--blanc); text-decoration: none; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: .4rem;
 }
+/* indique que « Lila Narinx » ramène à l'accueil — sans ça, rien ne le
+   distinguait d'un simple titre sur les pages de rubrique */
+.nav__fleche {
+  display: inline-block; font-size: .85em;
+  opacity: .6; transform: translateX(2px);
+  transition: opacity var(--t-vif) var(--c-doux), transform var(--t-vif) var(--c-doux);
+}
+.nav__marque:hover .nav__fleche, .nav__marque:focus-visible .nav__fleche {
+  opacity: 1; transform: translateX(-2px);
+}
+@media (hover: none) { .nav__fleche { opacity: .75; } }
 .nav__liens { display: flex; gap: 1.4rem; }
 .nav__liens a {
   font-size: .7rem; font-weight: 500; letter-spacing: .12em;
@@ -291,12 +303,13 @@ a { color: inherit; }
   display: block; overflow: hidden;
   aspect-ratio: 4 / 5; background: var(--vert-jour);
 }
-.tuile img {
+.tuile img, .tuile__video {
   width: 100%; height: 100%; object-fit: cover;
   object-position: 50% 25%;
   transition: transform var(--t-ample) var(--c-sortie);
 }
-.tuile:hover img, .tuile:focus-visible img { transform: scale(1.06); }
+.tuile:hover img, .tuile:focus-visible img,
+.tuile:hover .tuile__video, .tuile:focus-visible .tuile__video { transform: scale(1.06); }
 
 /* Le titre n'est plus posé SUR la photo : il descend sur un bandeau
    jaune, en vert. Lisible partout (6,08:1), quel que soit le visuel —
@@ -328,25 +341,64 @@ a { color: inherit; }
    haut à gauche ramène déjà à l'accueil, et le bouton Contact est à droite.
    Ces deux entrées ne servent que dans le menu burger. */
 @media (min-width: 1181px) { .nav__lien-contact, .nav__lien-accueil { display: none; } }
-.fiche {
-  background: transparent;   /* les filets structurent déjà la fiche */
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  padding: clamp(1.6rem, 3.5vw, 3rem);
-}
-@media (max-width: 760px) { .fiche { grid-template-columns: 1fr; } }
+/* Fiche contact : une seule colonne, tout sous le nom. Pas de filets —
+   l'espacement et la taille suffisent à séparer. */
+.fiche { padding: 0; }
 .fiche__nom {
   font-family: var(--display); font-weight: 800; font-variation-settings: "wdth" 110;
-  font-size: clamp(2rem, 4.2vw, 3.6rem); letter-spacing: -.04em; line-height: .95;
-  color: var(--jaune); margin: .7rem 0 .5rem;
+  font-size: clamp(2.4rem, 7vw, 5.5rem); letter-spacing: -.045em; line-height: .92;
+  color: var(--jaune); margin: .6rem 0 .4rem;
 }
-.fiche__role { color: var(--blanc-70); margin: 0; }
-.fiche__liste { margin: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 0; }
-.fiche__liste div { padding: .9rem 0; border-top: 1px solid var(--trait); }
-.fiche__liste dt { font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--blanc-70); margin-bottom: .2rem; }
-.fiche__liste dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(1rem, 1.6vw, 1.35rem); letter-spacing: -.015em; word-break: break-word; }
-.fiche__liste a { text-decoration: none; color: var(--blanc); }
-.fiche__liste a:hover { color: var(--jaune); }
+.fiche__role {
+  color: var(--blanc-70); margin: 0;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+}
+.fiche__liens {
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  display: flex; flex-direction: column;
+  gap: clamp(.5rem, 1.2vw, .9rem);
+  max-width: 44rem;
+}
+/* chaque contact est une grande cible cliquable : l'action est annoncée
+   (« Appeler », « Écrire un mail ») au-dessus de la valeur */
+.lien-contact {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "quoi fleche" "valeur fleche";
+  align-items: center;
+  gap: .15rem 1.5rem;
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1rem, 2vw, 1.5rem);
+  text-decoration: none; color: var(--blanc);
+  background: rgba(246, 243, 234, .05);
+  border-radius: 6px;
+  transition: background var(--t-base) var(--c-doux), color var(--t-vif) var(--c-doux);
+}
+.lien-contact:hover, .lien-contact:focus-visible {
+  background: var(--jaune); color: var(--vert);
+}
+.lien-contact__quoi {
+  grid-area: quoi;
+  font-size: .66rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--blanc-70);
+  transition: color var(--t-vif) var(--c-doux);
+}
+.lien-contact:hover .lien-contact__quoi,
+.lien-contact:focus-visible .lien-contact__quoi { color: rgb(var(--vert-rvb) / .75); }
+.lien-contact__valeur {
+  grid-area: valeur;
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(1.15rem, 2.4vw, 1.9rem); letter-spacing: -.025em;
+  word-break: break-word;
+}
+.lien-contact__fleche {
+  grid-area: fleche;
+  font-size: clamp(1.1rem, 2vw, 1.5rem); opacity: .5;
+  transition: opacity var(--t-vif) var(--c-doux), transform var(--t-base) var(--c-sortie);
+}
+.lien-contact:hover .lien-contact__fleche,
+.lien-contact:focus-visible .lien-contact__fleche {
+  opacity: 1; transform: translate(3px, -3px);
+}
 
 .pied {
   display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;
