@@ -183,6 +183,26 @@
          l'élément <video> lui-même, via webkitEnterFullscreen). On rend
          les contrôles natifs le temps du plein écran, puis on coupe le
          son en sortant : dans la grille, tout reste muet. */
+      let enPleinEcran = false;
+
+      /* Ordre d'essai :
+         1. requestFullscreen() sur la <video> — standard, ordi + Android.
+            Safari macOS/iPadOS l'ont aussi (16.4+).
+         2. sinon webkitEnterFullscreen() — iPhone uniquement. Il lève
+            InvalidStateError tant que les métadonnées ne sont pas là :
+            on attend loadedmetadata si besoin (en général déjà chargées,
+            la vidéo visible a été préparée par l'arbitre). */
+      const entrer = () => {
+        if (v.requestFullscreen) {
+          v.requestFullscreen().then(() => { enPleinEcran = true; }).catch(() => { natif(); });
+        } else natif();
+      };
+      const natif = () => {
+        if (!v.webkitEnterFullscreen) return;
+        const go = () => { try { v.webkitEnterFullscreen(); enPleinEcran = true; } catch (_) {} };
+        if (v.readyState >= 1) go();
+        else v.addEventListener('loadedmetadata', go, { once: true });
+      };
       const enGrand = () => {
         clip.dataset.gele = '0';
         charger(v);
@@ -190,18 +210,21 @@
         v.muted = false;
         v.controls = true;
         v.play().catch(() => {});
-        if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
-        else if (v.requestFullscreen) v.requestFullscreen().catch(() => {});
-        else if (clip.requestFullscreen) clip.requestFullscreen().catch(() => {});
+        entrer();
       };
+      /* Retour à la grille : seulement pour LE clip qui était en grand
+         (chaque clip écoute document, sans ce garde-fou les 10 autres
+         relançaient leur lecture et le plafond de 2 sautait). */
       const retour = () => {
+        if (!enPleinEcran) return;
         if (document.fullscreenElement === v || document.fullscreenElement === clip) return;
+        enPleinEcran = false;
         v.muted = true;
         if (!doux && !clip.classList.contains('clip--manuel')) v.controls = false;
-        if (clip.dataset.gele !== '1') v.play().catch(() => {});
+        arbitrer();
       };
       document.addEventListener('fullscreenchange', retour);
-      v.addEventListener('webkitendfullscreen', retour);   /* iOS */
+      v.addEventListener('webkitendfullscreen', retour);   /* iPhone */
 
       v.addEventListener('click', () => { if (!v.controls) enGrand(); });
       /* au clavier : Entrée ouvre en grand, Espace met en pause (WCAG 2.2.2) */
