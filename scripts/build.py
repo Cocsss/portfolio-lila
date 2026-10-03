@@ -37,7 +37,7 @@ COUVERTURES = {
     "video": POSTERS / "reel-cuisine-gazzosa.webp",
     "redaction": IMG / "94.webp",
     "graphisme": IMG / "92.webp",
-    "intelligence-artificielle": IMG / "71.webp",
+    "intelligence-artificielle": IMG / "96.webp",
 }
 
 def empreinte(chemin):
@@ -130,6 +130,9 @@ def media_html(m, titre_prod, span, pos=0):
         f'<video data-f="{e(f)}"{att_poster} muted loop playsinline preload="none" '
         f'width="{pw}" height="{ph}" tabindex="0" aria-label="{e(titre_prod)}"></video>'
         f'<button class="clip__son" type="button" aria-label="Activer le son"></button>'
+        f'<button class="clip__agrandir" type="button" aria-label="Agrandir la vidéo">'
+        f'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">'
+        f'<path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></button>'
         f'<span class="clip__duree" aria-hidden="true"></span></div>'
     )
 
@@ -250,7 +253,6 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 
 <div class="boite" role="dialog" aria-modal="true" aria-label="Visionneuse" aria-hidden="true">
   <div class="boite__barre">
-    <p class="boite__compte" aria-live="polite"></p>
     <button class="boite__fermer" type="button" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="boite__scene"></div>

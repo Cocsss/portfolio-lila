@@ -177,14 +177,47 @@
         clip.dataset.gele = gele ? '0' : '1';
         if (gele) { charger(v); v.play().catch(() => {}); } else v.pause();
       };
-      v.addEventListener('click', () => { if (!v.controls) basculer(); });
+
+      /* Un clic sur la vidéo = en grand, avec le son. Plein écran natif :
+         identique sur ordi et mobile (iOS Safari ne l'expose que sur
+         l'élément <video> lui-même, via webkitEnterFullscreen). On rend
+         les contrôles natifs le temps du plein écran, puis on coupe le
+         son en sortant : dans la grille, tout reste muet. */
+      const enGrand = () => {
+        clip.dataset.gele = '0';
+        charger(v);
+        clips.forEach(autre => { const av = $('video', autre); if (av && av !== v) av.muted = true; });
+        v.muted = false;
+        v.controls = true;
+        v.play().catch(() => {});
+        if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+        else if (v.requestFullscreen) v.requestFullscreen().catch(() => {});
+        else if (clip.requestFullscreen) clip.requestFullscreen().catch(() => {});
+      };
+      const retour = () => {
+        if (document.fullscreenElement === v || document.fullscreenElement === clip) return;
+        v.muted = true;
+        if (!doux && !clip.classList.contains('clip--manuel')) v.controls = false;
+        if (clip.dataset.gele !== '1') v.play().catch(() => {});
+      };
+      document.addEventListener('fullscreenchange', retour);
+      v.addEventListener('webkitendfullscreen', retour);   /* iOS */
+
+      v.addEventListener('click', () => { if (!v.controls) enGrand(); });
+      /* au clavier : Entrée ouvre en grand, Espace met en pause (WCAG 2.2.2) */
       v.addEventListener('keydown', ev => {
         if (v.controls) return;
-        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); basculer(); }
+        if (ev.key === 'Enter') { ev.preventDefault(); enGrand(); }
+        if (ev.key === ' ')     { ev.preventDefault(); basculer(); }
       });
 
       if (duree) {
         v.addEventListener('loadedmetadata', () => { duree.textContent = mmss(v.duration); });
+      }
+
+      const agrandir = $('.clip__agrandir', clip);
+      if (agrandir) {
+        agrandir.addEventListener('click', ev => { ev.stopPropagation(); enGrand(); });
       }
 
       if (son) {
@@ -217,7 +250,6 @@
   const boite = $('.boite');
   if (!boite) return;
   const scene   = $('.boite__scene', boite);
-  const compte  = $('.boite__compte', boite);
   const legende = $('.boite__legende', boite);
   const fermer  = $('.boite__fermer', boite);
   const prec    = $('.boite__fleche--prec', boite);
@@ -235,7 +267,6 @@
     try { await img.decode(); } catch (_) { /* on affiche quand même */ }
     if (lot[i] !== el || !boite.classList.contains('ouverte')) return;
     scene.replaceChildren(img);
-    compte.textContent = `${String(i + 1).padStart(2, '0')} / ${String(lot.length).padStart(2, '0')}`;
     legende.textContent = (el.dataset.alt || '').replace(/, visuel \d+$/, '');
     prec.hidden = suiv.hidden = lot.length < 2;
     [i - 1, i + 1].forEach(k => {

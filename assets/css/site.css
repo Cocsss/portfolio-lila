@@ -386,7 +386,10 @@ a { color: inherit; }
   color: var(--jaune);
   /* calé sur le nombre de signes (--n posé par build.py) : sinon « Vidéo »
      remplissait 27% de la ligne et « Réseaux sociaux » 82%. */
-  font-size: clamp(2.8rem, calc(135vw / var(--n, 14)), 22rem);
+  /* plancher à 9vw : sur tablette, « Intelligence artificielle » tombait à
+     45 px quand « Photo » faisait 207 px — un titre long passe sur 2 lignes
+     plutôt que de rapetisser. */
+  font-size: clamp(max(2.8rem, 9vw), calc(135vw / var(--n, 14)), 22rem);
 }
 .rub__sous { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.4rem; }
 
@@ -471,8 +474,8 @@ a { color: inherit; }
 /* ─── Vidéos : autoplay muet en boucle, aucun bouton de lecture ──── */
 .clip { position: relative; overflow: hidden; background: var(--vert-nuit); aspect-ratio: var(--r, 9/16); }
 .clip video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-.clip__son {
-  position: absolute; right: .6rem; top: .6rem; z-index: 3;
+.clip__son, .clip__agrandir {
+  position: absolute; top: .6rem; z-index: 3;
   width: 34px; aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer; padding: 0;
   background: rgb(var(--vert-rvb) / .6); color: var(--blanc);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
@@ -480,10 +483,13 @@ a { color: inherit; }
   opacity: 0;
   transition: opacity var(--t-base) var(--c-sortie), background var(--t-vif) var(--c-doux), color var(--t-vif) var(--c-doux);
 }
+.clip__son { right: .6rem; }
+.clip__agrandir { right: 3rem; }
 /* zone utile portée à 44 px sans agrandir le rond */
-.clip__son::before { content: ""; position: absolute; inset: -5px; }
-.clip:hover .clip__son, .clip__son:focus-visible, .clip__son[aria-pressed="true"] { opacity: 1; }
-.clip__son:hover, .clip__son[aria-pressed="true"] { background: var(--jaune); color: var(--vert); }
+.clip__son::before, .clip__agrandir::before { content: ""; position: absolute; inset: -5px; }
+.clip:hover .clip__son, .clip__son:focus-visible, .clip__son[aria-pressed="true"],
+.clip:hover .clip__agrandir, .clip__agrandir:focus-visible { opacity: 1; }
+.clip__son:hover, .clip__son[aria-pressed="true"], .clip__agrandir:hover { background: var(--jaune); color: var(--vert); }
 .clip__duree {
   position: absolute; left: .6rem; bottom: .6rem; z-index: 3;
   font-size: .64rem; font-weight: 600; letter-spacing: .06em; font-variant-numeric: tabular-nums;
@@ -495,7 +501,7 @@ a { color: inherit; }
 .clip__duree:not(:empty) { opacity: 1; }
 /* lecture auto refusée ou mouvement réduit → contrôles natifs, pas de doublon */
 .clip--manuel .clip__son, .clip--manuel .clip__duree { display: none; }
-@media (hover: none) { .clip__son { opacity: 1; } }
+@media (hover: none) { .clip__son, .clip__agrandir { opacity: 1; } }
 
 /* ─── Précédent / suivant : de simples liens, sans cadre ────────── */
 .voisins {
@@ -514,10 +520,18 @@ a { color: inherit; }
 .voisins a:last-child strong::after { content: " →"; }
 .voisins a:hover strong { color: var(--jaune); }
 
-/* ═══ LIGHTBOX ════════════════════════════════════════════════════ */
+/* ═══ LIGHTBOX ════════════════════════════════════════════════════
+   Un seul calque : l'image est centrée dans tout l'écran, et les commandes
+   (fermer, flèches, légende) flottent par-dessus, discrètes. Pas de barre,
+   pas de rangées : rien ne vient rogner la place de l'image. */
 .boite {
-  position: fixed; inset: 0; z-index: 300; background: rgb(var(--vert-rvb) / .97);
-  display: grid; grid-template-rows: auto 1fr auto;
+  position: fixed; inset: 0; z-index: 300; background: rgb(var(--vert-rvb) / .96);
+  /* un seul enfant (.boite__scene) : on l'étire pour qu'il remplisse tout
+     l'écran (comportement grid par défaut) — c'est LUI qui centre l'image
+     avec son propre place-items. Un « place-items:center » posé ICI
+     empêcherait .boite__scene de s'étirer (percent height de 100% non
+     résoluble), et l'image débordait en bas de l'écran. */
+  display: grid;
   opacity: 0; visibility: hidden;
   transition: opacity var(--t-base) var(--c-doux), visibility 0s var(--t-base);
 }
@@ -527,24 +541,60 @@ a { color: inherit; }
 }
 /* [hidden] doit l'emporter sur display:grid des commandes */
 .boite__fermer[hidden], .boite__fleche[hidden] { display: none; }
-/* l'image entre au lieu d'apparaître en coupure */
-.boite__scene img { animation: entree var(--t-base) var(--c-sortie) both; }
-@keyframes entree { from { opacity: 0; transform: scale(.985); } }
-.boite__barre { display: flex; justify-content: space-between; align-items: center; padding: 1rem var(--marge); }
-.boite__compte { font-family: var(--display); font-weight: 700; font-size: .8rem; letter-spacing: .1em; color: var(--jaune); margin: 0; }
-.boite__scene { display: grid; place-items: center; min-height: 0; padding: 0 clamp(1rem, 6vw, 5rem); }
-.boite__scene, .boite__scene img { cursor: zoom-out; }
-.boite__scene img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
-.boite__legende { padding: 1rem var(--marge) 1.4rem; text-align: center; font-size: .78rem; color: var(--blanc-70); margin: 0; min-height: 1rem; }
-.boite__fermer, .boite__fleche {
-  border: 0; cursor: pointer; background: transparent; color: var(--blanc);
-  display: grid; place-items: center; width: 46px; aspect-ratio: 1; border-radius: 50%; transition: background .2s, color .2s;
+
+/* la scène occupe tout l'écran ; l'image y est centrée */
+.boite__scene {
+  grid-area: 1 / 1; width: 100%; height: 100%;
+  display: grid; place-items: center; overflow: hidden;
+  padding: clamp(3.5rem, 8vh, 5rem) clamp(1rem, 7vw, 6rem);
+  cursor: zoom-out;
 }
-.boite__fermer:hover, .boite__fleche:hover { background: var(--jaune); color: var(--vert); }
-.boite__fleche { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(246,243,234,.08); }
-.boite__fleche--prec { left: clamp(.4rem, 2vw, 1.4rem); }
-.boite__fleche--suiv { right: clamp(.4rem, 2vw, 1.4rem); }
-@media (max-width: 600px) { .boite__fleche { display: none; } }
+/* ratio d'origine préservé (width/height auto), contenue dans l'écran.
+   max-height EN VH PUR, pas en % : .boite__scene a place-items:center,
+   donc son enfant ne « stretch » pas — la hauteur de la piste grid reste
+   « auto » (dépend du contenu), ce qui rend tout % de hauteur indéterminé
+   (boucle de résolution). Un vh ne dépend pas de la grille : pas de boucle. */
+.boite__scene img {
+  max-width: 100%;
+  max-height: calc(100vh - clamp(7rem, 16vh, 10rem));
+  width: auto; height: auto;
+  border-radius: 4px;
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / .55);
+  cursor: zoom-out;
+  animation: entree var(--t-base) var(--c-sortie) both;
+}
+@keyframes entree { from { opacity: 0; transform: scale(.97); } }
+
+/* commandes flottantes */
+.boite__barre { position: absolute; top: clamp(.8rem, 2vw, 1.4rem); right: clamp(.8rem, 2vw, 1.4rem); }
+.boite__fermer, .boite__fleche {
+  border: 0; cursor: pointer; color: var(--blanc);
+  background: rgb(246 243 234 / .1);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: grid; place-items: center; width: 44px; aspect-ratio: 1; border-radius: 50%;
+  transition: background .2s, color .2s, transform .2s;
+}
+.boite__fermer:hover, .boite__fleche:hover,
+.boite__fermer:focus-visible, .boite__fleche:focus-visible { background: var(--jaune); color: var(--vert); transform: scale(1.06); }
+.boite__fleche { position: absolute; top: 50%; transform: translateY(-50%); }
+.boite__fleche:hover, .boite__fleche:focus-visible { transform: translateY(-50%) scale(1.06); }
+.boite__fleche--prec { left: clamp(.6rem, 2vw, 1.4rem); }
+.boite__fleche--suiv { right: clamp(.6rem, 2vw, 1.4rem); }
+
+/* légende : petite, centrée en bas, ne gêne pas l'image */
+.boite__legende {
+  position: absolute; left: 0; right: 0; bottom: clamp(.9rem, 2.5vh, 1.6rem);
+  margin: 0; padding: 0 var(--marge); text-align: center;
+  font-size: .78rem; letter-spacing: .02em; color: var(--blanc-70);
+  pointer-events: none;
+}
+.boite__legende:empty { display: none; }
+
+@media (max-width: 600px) {
+  .boite__fleche { display: none; }           /* on glisse au doigt */
+  .boite__scene { padding: 3.5rem .75rem 3rem; }
+}
+@media (prefers-reduced-motion: reduce) { .boite__scene img { animation: none; } }
 body.bloque { overflow: hidden; }
 
 /* ═══ APPARITION ══════════════════════════════════════════════════ */
