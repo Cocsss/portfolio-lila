@@ -159,7 +159,10 @@ RUBRIQUES = [
         "productions": [{
             "titre": "Sites web rebrandés et redesignés pour mes clients Miège et Veyras",
             "ressources": "Contenus 33 à 38",
-            "liens": [("Voir le site Miège", "https://www.miege.be")],
+            "liens": [
+                ("Voir le site Miège", "https://www.miege.be"),
+                ("Voir le site Veyras", "https://www.veyrasconsulting.com/"),
+            ],
             "medias": img(33, 34, 35, 36, 37, 38),
             "cols": 2,
         }],
