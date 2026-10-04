@@ -311,7 +311,15 @@
     img.alt = el.dataset.alt || '';
     const source = $('img', el);
     if (source) { img.width = source.width; img.height = source.height; }
-    try { await img.decode(); } catch (_) { /* on affiche quand même */ }
+    /* decode() évite d'afficher une image à moitié peinte — mais il ne
+       se résout JAMAIS si le navigateur suspend le décodage (onglet en
+       arrière-plan, appareil qui throttle) : la visionneuse restait
+       alors vide indéfiniment. On n'attend donc pas plus de 300 ms ;
+       passé ce délai on affiche, l'image étant de toute façon chargée. */
+    await Promise.race([
+      img.decode().catch(() => {}),
+      new Promise(r => setTimeout(r, 300)),
+    ]);
     if (lot[i] !== el || !boite.classList.contains('ouverte')) return;
     scene.replaceChildren(img);
     legende.textContent = (el.dataset.alt || '').replace(/, visuel \d+$/, '');
@@ -420,13 +428,39 @@
   });
 
   let x0 = null;
-  scene.addEventListener('touchstart', e => { x0 = e.changedTouches[0].clientX; }, { passive: true });
+  /* Glissement au doigt. Un simple appui bougeait l'image : le seuil ne
+     regardait que l'écart horizontal, sans vérifier que le geste était
+     VOLONTAIRE ni HORIZONTAL. Trois conditions désormais :
+       · le doigt a parcouru plus de 70 px (un appui en fait moins de 10)
+       · le geste est franchement horizontal (au moins 2x le vertical)
+       · il n'a pas duré trop longtemps (sinon c'est un appui maintenu) */
+  let y0 = null, t0 = 0, multi = false;
+  scene.addEventListener('touchstart', e => {
+    /* Pincer pour zoomer changeait de photo : les deux doigts posés
+       puis levés produisaient un grand écart horizontal, lu comme un
+       glissement. Dès qu'un second doigt touche l'écran, on abandonne
+       le suivi — un changement d'image se fait à un seul doigt. */
+    if (e.touches.length > 1) { multi = true; x0 = y0 = null; return; }
+    x0 = e.changedTouches[0].clientX;
+    y0 = e.changedTouches[0].clientY;
+    t0 = Date.now();
+  }, { passive: true });
   scene.addEventListener('touchend', e => {
-    if (x0 === null) return;
-    const d = e.changedTouches[0].clientX - x0;
+    /* on ne réarme qu'une fois TOUS les doigts levés */
+    if (e.touches.length === 0 && multi) { multi = false; x0 = y0 = null; return; }
+    if (multi || x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    const dy = e.changedTouches[0].clientY - y0;
+    const duree = Date.now() - t0;
+    x0 = y0 = null;
     /* en mode vidéo le lot est vide : ne pas armer « glisse », sinon le
        tap suivant hors de la vidéo ne fermait plus la visionneuse */
-    if (Math.abs(d) > 48 && lot.length) { glisse = true; glisser(d < 0 ? 1 : -1); }
-    x0 = null;
+    if (!lot.length) return;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && duree < 800) {
+      glisse = true;
+      glisser(dx < 0 ? 1 : -1);
+    }
   }, { passive: true });
+  /* un geste interrompu par le système ne doit pas laisser le suivi armé */
+  scene.addEventListener('touchcancel', () => { multi = false; x0 = y0 = null; }, { passive: true });
 })();

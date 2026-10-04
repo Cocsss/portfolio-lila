@@ -759,8 +759,19 @@ a { color: inherit; }
 .boite__legende:empty { display: none; }
 
 @media (max-width: 600px) {
-  .boite__fleche { display: none; }           /* on glisse au doigt */
-  .boite__scene { padding: 3.5rem .75rem 3rem; }
+  /* les flèches restent visibles au doigt : le glissement seul n'était
+     pas découvrable, rien n'indiquait qu'on pouvait changer d'image.
+     Posées en bas, à portée du pouce, plutôt qu'au milieu des bords. */
+  .boite__scene { padding: 3.5rem .75rem 4.5rem; }
+  .boite__fleche {
+    top: auto; bottom: .9rem; transform: none;
+    width: 52px;                       /* cible confortable au doigt */
+    background: rgb(var(--vert-rvb) / .8);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  }
+  .boite__fleche:hover, .boite__fleche:focus-visible { transform: none; }
+  .boite__fleche--prec { left: 1rem; }
+  .boite__fleche--suiv { right: 1rem; }
 }
 @media (prefers-reduced-motion: reduce) { .boite__scene img { animation: none; } }
 body.bloque { overflow: hidden; }
