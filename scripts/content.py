@@ -323,9 +323,10 @@ RUBRIQUES = [
                 "cols": 2,
             },
             {
-                "titre": "Logo et affiches réalisés pour un événement fictif dans le cadre d’un cours de communication événementielle à l’IHECS",
-                "ressources": "Contenus 67 à 68",
-                "medias": img(67, 68),
+                "titre": "Affiches réalisées pour un événement fictif dans le cadre d’un cours de communication événementielle à l’IHECS",
+                # le logo Castly (visuel 67) a été retiré à la demande du client
+                "ressources": "Contenu 68",
+                "medias": img(68),
                 "cols": 3,
             },
         ],
