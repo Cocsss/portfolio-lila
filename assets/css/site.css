@@ -23,8 +23,10 @@
   --t-vif:    160ms;   /* retour immédiat : couleur, opacité d'un badge */
   --t-base:   260ms;   /* états d'interface : barre, boutons, visionneuse */
   --t-ample:  420ms;   /* déplacements : panneaux, zooms d'image */
-  --t-reveal: 560ms;   /* apparition au défilement */
-  --c-reveal: cubic-bezier(.25, .46, .45, .94);
+  --t-reveal: 850ms;   /* apparition au défilement */
+  /* expo-out : départ vif, longue pose — c'est la pose qui fait « pro »,
+     l'ancienne courbe quasi linéaire donnait un mouvement uniforme */
+  --c-reveal: cubic-bezier(.16, 1, .3, 1);
   --c-sortie: cubic-bezier(.2, .7, .3, 1);
   --c-doux:   cubic-bezier(.4, 0, .2, 1);
 
@@ -243,7 +245,10 @@ a { color: inherit; }
     border-bottom: 1px solid rgb(var(--vert-rvb) / .5);
   }
   .nav__liens a:last-child { border-bottom: 0; }
-  .nav__liens a:hover { opacity: .6; }
+  /* la règle desktop (:hover → blanc) s'appliquait aussi ici : sur fond
+     jaune, du blanc à 60 % d'opacité devenait illisible au tap mobile
+     (le survol reste « collé » tant qu'on ne touche pas ailleurs) */
+  .nav__liens a:hover { color: var(--vert); opacity: .6; }
   .nav__liens a[aria-current="page"] {
     color: var(--vert);
     border-bottom: 3px solid var(--vert);
@@ -441,6 +446,16 @@ a { color: inherit; }
 }
 .pied__coord a { color: var(--blanc); text-decoration: none; transition: color .2s; }
 .pied__coord a:hover { color: var(--jaune); }
+/* même pilule que le bouton Contact de la nav : une seule forme pour
+   la même action, qu'on la croise en haut ou en bas de page */
+.pied__contact {
+  font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--vert); background: var(--jaune); text-decoration: none;
+  padding: .6rem 1.1rem; border-radius: 999px; white-space: nowrap;
+  transition: transform .2s, background .2s;
+}
+.pied__contact:hover { transform: translateY(-2px); }
+.pied__contact[aria-current="page"] { background: var(--blanc); }
 
 /* ═══ PAGE DE RUBRIQUE : titre à gauche, photo en bloc à droite ═════ */
 .rub__tete {
@@ -659,13 +674,58 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { .boite__scene img { animation: none; } }
 body.bloque { overflow: hidden; }
 
-/* ═══ APPARITION ══════════════════════════════════════════════════ */
-.monte { opacity: 0; transform: translateY(28px); }
+/* ═══ APPARITION ══════════════════════════════════════════════════
+   Trois registres, un par rôle :
+   · .monte        — bloc de texte : fondu + légère montée
+   · .monte--titre — titre géant : chaque mot se lève sous son masque
+   · .cascade      — grille : les enfants entrent l'un après l'autre
+   Les délais (--d) sont posés par build.py (mots) ou site.js (cascades).
+   ══════════════════════════════════════════════════════════════════ */
+.monte { opacity: 0; transform: translateY(24px); }
 .monte.vu {
   opacity: 1; transform: none;
   transition: opacity var(--t-reveal) var(--c-reveal), transform var(--t-reveal) var(--c-reveal);
 }
-@media (prefers-reduced-motion: reduce) { .monte { opacity: 1; transform: none; } .monte.vu { transition: none; } }
+/* suit le dernier mot de « Lila Narinx » plutôt que d'entrer avec lui.
+   Posé sur .monte (pas .monte.vu) : site.js lit ce délai AVANT d'ajouter
+   .vu pour décider s'il doit poser le sien. Placé APRÈS .monte.vu : à
+   spécificité égale le raccourci « transition » ci-dessus remet le
+   délai à 0 et, en cascade, c'est la règle la plus tardive qui gagne. */
+.hero__bas.monte { transition-delay: .25s; }
+
+/* Titres : le conteneur reste en place, ce sont les mots qui montent.
+   Chaque .mot est une fenêtre (overflow hidden) ; le texte part sous
+   la ligne et remonte à sa place. */
+.monte--titre .mot { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.monte--titre .mot__texte { display: inline-block; transform: translateY(112%); }
+.monte--titre.vu .mot__texte {
+  transform: none;
+  transition: transform var(--t-reveal) var(--c-reveal);
+  transition-delay: var(--d, 0s);
+}
+@media (max-width: 700px) { .hero__nom .mot { display: block; } }
+
+/* Grilles : l'état caché vit sur les ENFANTS, le .vu sur le conteneur —
+   l'ordre d'entrée est celui de la grille, pas celui de l'observateur */
+.cascade > * { opacity: 0; transform: translateY(26px) scale(1.015); }
+.cascade.vu > * {
+  opacity: 1; transform: none;
+  transition: opacity var(--t-reveal) var(--c-reveal), transform var(--t-reveal) var(--c-reveal);
+  transition-delay: var(--d, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .monte, .cascade > *, .monte--titre .mot__texte { opacity: 1; transform: none; }
+  .monte.vu, .cascade.vu > *, .monte--titre.vu .mot__texte { transition: none; }
+}
+
+/* ═══ FONDU ENTRE PAGES (View Transitions, amélioration progressive) ═ */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation-duration: 180ms; }
+::view-transition-new(root) { animation-duration: 260ms; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}
 
 /* ═══ MOUVEMENT RÉDUIT : on neutralise TOUT le mouvement ═══════════ */
 @media (prefers-reduced-motion: reduce) {

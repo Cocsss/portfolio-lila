@@ -101,6 +101,18 @@ def famille(w, h):
     return "tres-haut"
 
 
+def mots(texte, pas=.07, depart=0.0):
+    """Titre découpé en mots masqués : chacun se lève derrière son propre
+    cache, légèrement après le précédent. L'effet est porté par le CSS
+    (.mot / .mot__texte) ; ici on ne pose que la structure et les délais."""
+    out = []
+    for k, m in enumerate(texte.split(" ")):
+        d = depart + k * pas
+        st = f' style="--d:{d:.2f}s"' if d else ""
+        out.append(f'<span class="mot"><span class="mot__texte"{st}>{e(m)}</span></span>')
+    return " ".join(out)
+
+
 def media_html(m, titre_prod, span, pos=0):
     if m["type"] == "image":
         n = m["n"]
@@ -114,7 +126,7 @@ def media_html(m, titre_prod, span, pos=0):
         contenir = " vignette--contenir" if famille(w, h) == "banniere" else ""
         large = " large" if (w / h) >= 1.2 or span >= 4 else ""
         return (
-            f'<button class="vignette monte{contenir}{large}" type="button" '
+            f'<button class="vignette{contenir}{large}" type="button" '
             f'data-plein="{plein.as_posix()}" data-alt="{e(alt)}" '
             f'style="--r:{w}/{h};--s:{span}">'
             f'<img src="{src.as_posix()}" alt="{e(alt)}" width="{w}" height="{h}" '
@@ -127,7 +139,7 @@ def media_html(m, titre_prod, span, pos=0):
     att_debut = f' data-debut="{m["debut"]}"' if m.get("debut") else ""
     large = " large" if (pw / ph) >= 1.2 or span >= 4 else ""
     return (
-        f'<div class="clip monte{large}" style="--r:{pw}/{ph};--s:{span}">'
+        f'<div class="clip{large}" style="--r:{pw}/{ph};--s:{span}">'
         f'<video data-f="{e(f)}"{att_debut}{att_poster} muted loop playsinline preload="none" '
         f'width="{pw}" height="{ph}" tabindex="0" aria-label="{e(titre_prod)}"></video>'
         # aucune surcouche : ni bouton son, ni agrandir, ni durée.
@@ -157,7 +169,7 @@ def collage_html(medias, titre_prod, depart=0, grille=False):
             if t:
                 tuiles.append(t)
                 pos = suivant
-        return f'<div class="collage collage--grille">{"".join(tuiles)}</div>'
+        return f'<div class="collage collage--grille cascade">{"".join(tuiles)}</div>'
     fams = [famille(*dims(m)) for m in medias]
     tuiles, pos = [], depart
     for i, m in enumerate(medias):
@@ -174,7 +186,7 @@ def collage_html(medias, titre_prod, depart=0, grille=False):
         if t:
             tuiles.append(t)
             pos = suivant
-    return f'<div class="collage">{"".join(tuiles)}</div>'
+    return f'<div class="collage cascade">{"".join(tuiles)}</div>'
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -255,7 +267,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 {corps}
 </main>
 
-<footer class="pied">
+<footer class="pied monte">
   <a class="pied__nom" href="index.html">{e(I['nom'])}
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </a>
@@ -263,6 +275,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
     <a href="mailto:{e(I['email'])}">{e(I['email'])}</a>
     <a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a>{('<a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">LinkedIn</a>') if I.get('linkedin') else ''}
   </p>
+  <a class="pied__contact" href="contact.html"{' aria-current="page"' if actif == "contact" else ""}>Contact</a>
 </footer>
 
 <div class="boite" role="dialog" aria-modal="true" aria-label="Visionneuse" aria-hidden="true">
@@ -317,7 +330,7 @@ def accueil():
         return img_tag(COUVERTURES[r["id"]], "", loading="lazy", decoding="async")
 
     tuiles = "".join(
-        f'<a class="tuile monte" href="{page_de(r)}">'
+        f'<a class="tuile" href="{page_de(r)}">'
         + '<span class="tuile__visuel">'
         + visuel_tuile(r)
         + f'</span><span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a>'
@@ -326,8 +339,8 @@ def accueil():
     corps = f"""
   <section class="hero" aria-label="Accueil">
     <div class="dedans">
-      <h1 class="titre-geant hero__nom"><span>Lila</span> <span>Narinx</span></h1>
-      <div class="hero__bas">
+      <h1 class="titre-geant hero__nom monte--titre">{mots(I['nom'])}</h1>
+      <div class="hero__bas monte">
         <p class="hero__role">{e(I['role'])}</p>
       </div>
     </div>
@@ -344,7 +357,7 @@ def accueil():
 
   <section class="bloc" id="productions" aria-label="{e(C.TITRE_PRODUCTIONS)}" style="padding-top:0">
     <div class="dedans">
-      <div class="index">{tuiles}</div>
+      <div class="index cascade">{tuiles}</div>
     </div>
   </section>
 
@@ -361,13 +374,13 @@ def page_rubrique(r, i):
     corps = f"""
   <header class="rub__tete" aria-label="{e(r['titre'])}">
     <div>
-      <h1 class="titre-geant rub__titre" style="--n:{len(r['titre'])}">{e(r['titre'])}</h1>
+      <h1 class="titre-geant rub__titre monte--titre" style="--n:{len(r['titre'])}">{mots(r['titre'])}</h1>
     </div>
   </header>
 
   {''.join(production_html(p, k) for k, p in enumerate(r['productions']))}
 
-  <nav class="voisins" aria-label="Rubriques voisines">
+  <nav class="voisins cascade" aria-label="Rubriques voisines">
     <a href="{page_de(prec)}"><span class="etq">Précédent</span> <strong>{e(prec['titre'])}</strong></a>
     <a href="{page_de(suiv)}"><span class="etq">Suivant</span> <strong>{e(suiv['titre'])}</strong></a>
   </nav>
@@ -383,10 +396,9 @@ def page_contact():
   <section class="bloc contact contact--page" aria-label="Contact">
     <div class="dedans">
       <div class="fiche monte">
-        <p class="etq">Contact</p>
         <p class="fiche__nom">{e(I['nom'])}</p>
         <p class="fiche__role">{e(I['role'])}</p>
-        <div class="fiche__liens">
+        <div class="fiche__liens cascade">
           <a class="lien-contact" href="mailto:{e(I['email'])}">
             <span class="lien-contact__quoi">Écrire un mail</span>
             <span class="lien-contact__valeur">{e(I['email'])}</span>

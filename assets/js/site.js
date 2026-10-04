@@ -56,10 +56,30 @@
   /* ─────────────────────────────────────────────────────────────────
      3. Apparition au défilement
      ───────────────────────────────────────────────────────────────── */
-  const montants = $$('.monte');
+  /* .monte (texte) et .cascade (grilles de tuiles/vignettes/clips) sont
+     révélés par le même observateur. Pour .cascade, le .vu se pose sur
+     le CONTENEUR ; chaque enfant reçoit son propre délai (--d) pour
+     entrer l'un après l'autre — l'ordre du DOM, pas celui, aléatoire,
+     dans lequel l'observateur les rapporte. */
+  const montants = $$('.monte, .monte--titre, .cascade');
   if (doux) {
     montants.forEach(el => el.classList.add('vu'));
   } else if (montants.length) {
+    const PAS_CASCADE = 70, PLAFOND_CASCADE = 6;   /* au-delà, simultané */
+
+    const reveler = (el, rang) => {
+      if (el.classList.contains('cascade')) {
+        [...el.children].forEach((enfant, k) => {
+          enfant.style.setProperty('--d', Math.min(k, PLAFOND_CASCADE) * PAS_CASCADE + 'ms');
+        });
+      } else if (parseFloat(getComputedStyle(el).transitionDelay) === 0) {
+        /* un délai déjà fixé en CSS (ex. .hero__bas, posé après le nom)
+           a une raison d'être : on ne l'écrase pas */
+        el.style.transitionDelay = Math.min(rang * 60, 240) + 'ms';
+      }
+      el.classList.add('vu');
+    };
+
     /* threshold .06 était surfacique : un bloc de 3000 px devait montrer
        190 px, une vignette de 300 px seulement 18. threshold 0 + marge
        basse négative rend le déclenchement indépendant de la hauteur. */
@@ -67,21 +87,35 @@
       entrees
         .filter(e => e.isIntersecting)
         .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        .forEach((e, k) => {
-          e.target.style.transitionDelay = Math.min(k * 60, 240) + 'ms';
-          e.target.classList.add('vu');
-          obs.unobserve(e.target);
-        });
+        .forEach((e, k) => { reveler(e.target, k); obs.unobserve(e.target); });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
     montants.forEach(el => oeil.observe(el));
+
+    /* Piège de fin de page : la marge de -12% ne peut jamais se franchir
+       si l'élément (souvent le pied de page) arrive pile au bas d'une
+       page qui ne défile pas plus loin — il reste invisible à vie.
+       Dès qu'on est à moins de 4 px du bas, on révèle tout ce qui reste. */
+    let enBas = false;
+    addEventListener('scroll', () => {
+      const reste = document.documentElement.scrollHeight - innerHeight - scrollY;
+      if (reste > 4 || enBas) return;
+      enBas = true;
+      montants.forEach(el => { if (!el.classList.contains('vu')) reveler(el, 0); });
+    }, { passive: true });
 
     /* Filet : uniquement si l'observateur n'a RIEN produit (navigateur
        capricieux). On révèle alors sans animer, pour ne pas supprimer
        l'effet sur tout le reste de la page. */
     addEventListener('load', () => setTimeout(() => {
-      if (document.querySelector('.monte.vu')) return;
+      if (document.querySelector('.vu')) return;
       oeil.disconnect();
-      montants.forEach(el => { el.style.transition = 'none'; el.classList.add('vu'); });
+      montants.forEach(el => {
+        el.style.transition = 'none';
+        /* querySelectorAll et pas children : les mots d'un titre sont
+           des petits-enfants (h1 > .mot > .mot__texte) */
+        el.querySelectorAll('*').forEach(c => c.style.transition = 'none');
+        el.classList.add('vu');
+      });
     }, 1200));
   }
 
