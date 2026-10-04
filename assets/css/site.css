@@ -358,6 +358,38 @@ a { color: inherit; }
 /* ═══ CONTACT : une fiche ═════════════════════════════════════════ */
 .contact { border-top: 1px solid var(--trait); }
 .contact--page { border-top: 0; min-height: 100svh; display: grid; align-content: center; padding-top: calc(var(--marge) + 5rem); }
+.contact__mise {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+  align-items: center; gap: clamp(2.5rem, 6vw, 6rem);
+}
+@media (max-width: 860px) {
+  .contact__mise { grid-template-columns: 1fr; }
+  .contact__portrait { order: -1; max-width: 16rem; margin-inline: auto; }
+}
+/* Portrait avec une lueur qui dérive lentement derrière — toujours les
+   trois couleurs du site (jaune sur vert), jamais une quatrième teinte.
+   Le halo doit DÉBORDER du cadre : overflow-hidden ne peut donc pas être
+   sur le même élément que la lueur, sinon elle se coupe pile à son bord
+   et ne sert plus à rien (premier essai — invisible, piégée dessous). */
+.contact__portrait { position: relative; aspect-ratio: 537 / 730; }
+.contact__cadre {
+  position: relative; z-index: 1; display: block;
+  width: 100%; height: 100%; border-radius: 10px; overflow: hidden;
+}
+.contact__cadre img { width: 100%; height: 100%; object-fit: cover; }
+.contact__lueur {
+  position: absolute; inset: -35%; z-index: 0;
+  background:
+    radial-gradient(closest-side, rgb(238 236 131 / .6), transparent 70%) 18% 22% / 65% 65% no-repeat,
+    radial-gradient(closest-side, rgb(246 243 234 / .3), transparent 70%) 82% 72% / 55% 55% no-repeat;
+  filter: blur(40px);
+  animation: lueur-derive 16s ease-in-out infinite alternate;
+}
+@keyframes lueur-derive {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(4%, -5%) rotate(8deg); }
+}
+@media (prefers-reduced-motion: reduce) { .contact__lueur { animation: none; } }
 /* Sur ordinateur, « Accueil » et « Contact » font doublon : la marque en
    haut à gauche ramène déjà à l'accueil, et le bouton Contact est à droite.
    Ces deux entrées ne servent que dans le menu burger. */
@@ -428,24 +460,18 @@ a { color: inherit; }
   padding: var(--bloc-4) 0 var(--bloc-3);
   border-top: 1px solid var(--trait);
 }
-.pied__nom {
-  font-family: var(--display); font-weight: 800; font-variation-settings: "wdth" 110;
-  font-size: clamp(1.3rem, 2.4vw, 2rem); letter-spacing: -.04em; line-height: 1;
-  color: var(--jaune); margin: 0;
-  display: inline-flex; align-items: center; gap: .55rem;
-  text-decoration: none;
-  transition: color var(--t-vif) var(--c-doux);
+/* icône seule : le nom et les coordonnées en toutes lettres sont déjà
+   dans la nav (en haut) et sur la page Contact — inutile de les répéter */
+.pied__retour {
+  display: grid; place-items: center;
+  width: 40px; aspect-ratio: 1; border-radius: 50%;
+  color: var(--jaune); border: 1px solid rgb(238 236 131 / .4);
+  transition: background var(--t-vif) var(--c-doux), color var(--t-vif) var(--c-doux),
+              border-color var(--t-vif) var(--c-doux);
 }
-.pied__nom svg { transition: transform var(--t-base) var(--c-sortie); }
-.pied__nom:hover { color: var(--blanc); }
-.pied__nom:hover svg { transform: translateY(-3px); }
-.pied__coord {
-  margin: 0; display: flex; flex-wrap: wrap; gap: .4rem 2.2rem;
-  font-family: var(--display); font-weight: 600;
-  font-size: clamp(1rem, 1.5vw, 1.3rem); letter-spacing: -.015em;
+.pied__retour:hover {
+  background: var(--jaune); color: var(--vert); border-color: var(--jaune);
 }
-.pied__coord a { color: var(--blanc); text-decoration: none; transition: color .2s; }
-.pied__coord a:hover { color: var(--jaune); }
 /* même pilule que le bouton Contact de la nav : une seule forme pour
    la même action, qu'on la croise en haut ou en bas de page */
 .pied__contact {
@@ -575,8 +601,10 @@ a { color: inherit; }
   font-size: clamp(1.1rem, 2vw, 1.75rem); letter-spacing: -.04em; line-height: 1;
   color: var(--blanc); transition: color var(--t-vif) var(--c-doux);
 }
-.voisins a:first-child strong::before { content: "← "; }
-.voisins a:last-child strong::after { content: " →"; }
+/* flèches SVG dans le HTML (même tracé que partout) : les ← → en
+   content: CSS rendaient avec la police, pas avec le trait commun */
+.voisins strong svg { flex-shrink: 0; }
+.voisins strong { display: inline-flex; align-items: center; gap: .45rem; }
 .voisins a:hover strong { color: var(--jaune); }
 
 /* ═══ LIGHTBOX ════════════════════════════════════════════════════

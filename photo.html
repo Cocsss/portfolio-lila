@@ -19,14 +19,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=0161bce1">
+<!-- Les trois fichiers latin réellement utilisés au premier rendu (titres,
+     texte courant, accent italique). Sans ce préchargement, le navigateur
+     attend d'avoir lu et appliqué la feuille Google Fonts avant même de
+     COMMENCER à les télécharger : la police de secours s'affichait près
+     d'une seconde avant le changement, visible et brusque. -->
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/archivo/v25/k3kQo8UDI-1M0wlSfdnoLmvDIaI.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zAjjH7Motmp5g.woff2">
+<link rel="stylesheet" href="assets/css/site.css?v=6ce4c2e5">
 </head>
 <body class="page-rubrique">
 
 <a class="saut-contenu" href="#contenu">Aller au contenu</a>
 
 <nav class="nav" aria-label="Navigation principale">
-  <a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true">→</span><span class="nav__marque-nom">Lila Narinx</span><span class="visuellement-cache"> — retour à l'accueil</span></a>
+  <a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span class="nav__marque-nom">Lila Narinx</span><span class="visuellement-cache"> — retour à l'accueil</span></a>
   <div class="nav__liens" id="menu-principal"><a class="nav__lien-accueil" href="index.html">Accueil</a><a href="campagne-360.html">Campagne 360°</a><a href="reseaux-sociaux.html">Réseaux sociaux</a><a href="sites-web.html">Sites web</a><a href="photo.html" aria-current="page">Photo</a><a href="video.html">Vidéo</a><a href="redaction.html">Rédaction</a><a href="graphisme.html">Graphisme</a><a href="intelligence-artificielle.html">Intelligence artificielle</a><a class="nav__lien-contact" href="contact.html">Contact</a></div>
   <a class="nav__contact" href="contact.html">Contact</a>
   <button class="nav__bascule" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Menu"><span></span><span></span></button>
@@ -43,20 +54,16 @@
   <section class="prod" aria-labelledby="p0"><div class="prod__texte monte"><h2 class="prod__titre" id="p0">Stage chez Tribe Agency</h2><p class="prod__para">Durant mon stage de 3 mois réalisé chez Tribe Agency, une agence de communication et relations publiques évoluant dans le secteur Food &amp; Beverage et Horeca, j’ai eu la chance de pouvoir participer à de nombreux shootings. Vous trouverez ci-joint certains moodboards que j’ai réalisés ainsi que quelques photos emblématiques de ces shootings.</p></div><div class="prod__medias"><div class="collage cascade"><button class="vignette" type="button" data-plein="assets/img/39@full.webp" data-alt="Stage chez Tribe Agency, visuel 1" style="--r:1000/1000;--s:2"><img src="assets/img/39.webp" alt="Stage chez Tribe Agency, visuel 1" width="1000" height="1000" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/40@full.webp" data-alt="Stage chez Tribe Agency, visuel 2" style="--r:1000/999;--s:2"><img src="assets/img/40.webp" alt="Stage chez Tribe Agency, visuel 2" width="1000" height="999" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/41@full.webp" data-alt="Stage chez Tribe Agency, visuel 3" style="--r:999/1000;--s:2"><img src="assets/img/41.webp" alt="Stage chez Tribe Agency, visuel 3" width="999" height="1000" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/42@full.webp" data-alt="Stage chez Tribe Agency, visuel 4" style="--r:1000/1000;--s:2"><img src="assets/img/42.webp" alt="Stage chez Tribe Agency, visuel 4" width="1000" height="1000" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/43@full.webp" data-alt="Stage chez Tribe Agency, visuel 5" style="--r:1000/999;--s:2"><img src="assets/img/43.webp" alt="Stage chez Tribe Agency, visuel 5" width="1000" height="999" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/44@full.webp" data-alt="Stage chez Tribe Agency, visuel 6" style="--r:1000/999;--s:2"><img src="assets/img/44.webp" alt="Stage chez Tribe Agency, visuel 6" width="1000" height="999" loading="lazy" decoding="async"></button><button class="vignette large" type="button" data-plein="assets/img/45@full.webp" data-alt="Stage chez Tribe Agency, visuel 7" style="--r:1000/683;--s:4"><img src="assets/img/45.webp" alt="Stage chez Tribe Agency, visuel 7" width="1000" height="683" loading="lazy" decoding="async"></button></div></div></section><section class="prod" aria-labelledby="p1"><div class="prod__texte monte"><h2 class="prod__titre" id="p1">Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% »</h2></div><div class="prod__medias"><div class="collage cascade"><button class="vignette" type="button" data-plein="assets/img/46@full.webp" data-alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 1" style="--r:667/1000;--s:2"><img src="assets/img/46.webp" alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 1" width="667" height="1000" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/47@full.webp" data-alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 2" style="--r:667/1000;--s:2"><img src="assets/img/47.webp" alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 2" width="667" height="1000" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/48@full.webp" data-alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 3" style="--r:667/1000;--s:2"><img src="assets/img/48.webp" alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 3" width="667" height="1000" loading="lazy" decoding="async"></button><button class="vignette" type="button" data-plein="assets/img/49@full.webp" data-alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 4" style="--r:667/1000;--s:2"><img src="assets/img/49.webp" alt="Photos réalisées pour la marque de boisson non alcoolisée « Vendredi Apér0% », visuel 4" width="667" height="1000" loading="lazy" decoding="async"></button></div></div></section>
 
   <nav class="voisins cascade" aria-label="Rubriques voisines">
-    <a href="sites-web.html"><span class="etq">Précédent</span> <strong>Sites web</strong></a>
-    <a href="video.html"><span class="etq">Suivant</span> <strong>Vidéo</strong></a>
+    <a href="sites-web.html"><span class="etq">Précédent</span> <strong><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M19 12H5M11 5l-7 7 7 7"/></svg> Sites web</strong></a>
+    <a href="video.html"><span class="etq">Suivant</span> <strong>Vidéo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg></strong></a>
   </nav>
 
 </main>
 
 <footer class="pied monte">
-  <a class="pied__nom" href="index.html">Lila Narinx
+  <a class="pied__retour" href="index.html" aria-label="Retour à l'accueil">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </a>
-  <p class="pied__coord">
-    <a href="mailto:lila.narinx@gmail.com">lila.narinx@gmail.com</a>
-    <a href="tel:+32471455177">+32 471 45 51 77</a>
-  </p>
   <a class="pied__contact" href="contact.html">Contact</a>
 </footer>
 

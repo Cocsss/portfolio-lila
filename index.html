@@ -19,7 +19,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=0161bce1">
+<!-- Les trois fichiers latin réellement utilisés au premier rendu (titres,
+     texte courant, accent italique). Sans ce préchargement, le navigateur
+     attend d'avoir lu et appliqué la feuille Google Fonts avant même de
+     COMMENCER à les télécharger : la police de secours s'affichait près
+     d'une seconde avant le changement, visible et brusque. -->
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/archivo/v25/k3kQo8UDI-1M0wlSfdnoLmvDIaI.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zAjjH7Motmp5g.woff2">
+<link rel="stylesheet" href="assets/css/site.css?v=6ce4c2e5">
 </head>
 <body class="page-accueil">
 
@@ -54,7 +65,7 @@
 
   <section class="bloc" id="productions" aria-label="Mes productions" style="padding-top:0">
     <div class="dedans">
-      <div class="index cascade"><a class="tuile" href="campagne-360.html"><span class="tuile__visuel"><img src="assets/img/76.webp" alt="" width="1000" height="1000" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Campagne 360°</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a><a class="tuile" href="reseaux-sociaux.html"><span class="tuile__visuel"><img src="assets/img/79.webp" alt="" width="1000" height="1000" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Réseaux sociaux</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a><a class="tuile" href="sites-web.html"><span class="tuile__visuel"><img src="assets/img/75.webp" alt="" width="1000" height="879" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Sites web</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a><a class="tuile" href="photo.html"><span class="tuile__visuel"><img src="assets/img/40.webp" alt="" width="1000" height="999" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Photo</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a><a class="tuile" href="video.html"><span class="tuile__visuel"><video class="tuile__video" data-f="mockup-iphone-poche" poster="assets/img/posters/mockup-iphone-poche.webp" muted loop playsinline preload="none" width="1200" height="900" aria-hidden="true"></video></span><span class="tuile__corps"><span class="tuile__titre">Vidéo</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a><a class="tuile" href="redaction.html"><span class="tuile__visuel"><img src="assets/img/94.webp" alt="" width="1000" height="750" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Rédaction</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a><a class="tuile" href="graphisme.html"><span class="tuile__visuel"><img src="assets/img/92.webp" alt="" width="829" height="1000" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Graphisme</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a><a class="tuile" href="intelligence-artificielle.html"><span class="tuile__visuel"><img src="assets/img/96.webp" alt="" width="1000" height="750" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Intelligence artificielle</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a></div>
+      <div class="index cascade"><a class="tuile" href="campagne-360.html"><span class="tuile__visuel"><img src="assets/img/76.webp" alt="" width="1000" height="1000" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Campagne 360°</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a><a class="tuile" href="reseaux-sociaux.html"><span class="tuile__visuel"><img src="assets/img/79.webp" alt="" width="1000" height="1000" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Réseaux sociaux</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a><a class="tuile" href="sites-web.html"><span class="tuile__visuel"><img src="assets/img/75.webp" alt="" width="1000" height="879" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Sites web</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a><a class="tuile" href="photo.html"><span class="tuile__visuel"><img src="assets/img/40.webp" alt="" width="1000" height="999" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Photo</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a><a class="tuile" href="video.html"><span class="tuile__visuel"><video class="tuile__video" data-f="mockup-iphone-poche" poster="assets/img/posters/mockup-iphone-poche.webp" muted loop playsinline preload="none" width="1200" height="900" aria-hidden="true"></video></span><span class="tuile__corps"><span class="tuile__titre">Vidéo</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a><a class="tuile" href="redaction.html"><span class="tuile__visuel"><img src="assets/img/94.webp" alt="" width="1000" height="750" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Rédaction</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a><a class="tuile" href="graphisme.html"><span class="tuile__visuel"><img src="assets/img/92.webp" alt="" width="829" height="1000" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Graphisme</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a><a class="tuile" href="intelligence-artificielle.html"><span class="tuile__visuel"><img src="assets/img/96.webp" alt="" width="1000" height="750" loading="lazy" decoding="async"></span><span class="tuile__corps"><span class="tuile__titre">Intelligence artificielle</span><svg class="tuile__fleche" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a></div>
     </div>
   </section>
 
@@ -62,13 +73,9 @@
 </main>
 
 <footer class="pied monte">
-  <a class="pied__nom" href="index.html">Lila Narinx
+  <a class="pied__retour" href="index.html" aria-label="Retour à l'accueil">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </a>
-  <p class="pied__coord">
-    <a href="mailto:lila.narinx@gmail.com">lila.narinx@gmail.com</a>
-    <a href="tel:+32471455177">+32 471 45 51 77</a>
-  </p>
   <a class="pied__contact" href="contact.html">Contact</a>
 </footer>
 

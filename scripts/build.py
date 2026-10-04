@@ -70,6 +70,19 @@ def e(t):
     return html.escape(str(t), quote=True)
 
 
+def fleche(classe="", taille=13):
+    """La même flèche partout où on signale « ça ouvre / ça mène
+    ailleurs » — un ↗ en Unicode (tuiles, liens de contact) et un SVG
+    dessiné à la main (liens externes de production) ne rendent PAS
+    pareil ; direction artistique unique, un seul tracé."""
+    cls = f' class="{e(classe)}"' if classe else ""
+    return (
+        f'<svg{cls} width="{taille}" height="{taille}" viewBox="0 0 24 24" fill="none" '
+        f'stroke="currentColor" stroke-width="2.4" aria-hidden="true">'
+        f'<path d="M7 17 17 7M8 7h9v9"/></svg>'
+    )
+
+
 def page_de(r):
     return f'{r["id"]}.html'
 
@@ -204,8 +217,7 @@ def production_html(p, i):
         for libelle, href in p["liens"]:
             g.append(
                 f'<a href="{e(href)}" target="_blank" rel="noopener noreferrer">{e(libelle)}'
-                f'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
-                f'stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>')
+                f'{fleche()}</a>')
         g.append("</p>")
     g.append("</div>")
     g.append('<div class="prod__medias">')
@@ -250,6 +262,17 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Les trois fichiers latin réellement utilisés au premier rendu (titres,
+     texte courant, accent italique). Sans ce préchargement, le navigateur
+     attend d'avoir lu et appliqué la feuille Google Fonts avant même de
+     COMMENCER à les télécharger : la police de secours s'affichait près
+     d'une seconde avant le changement, visible et brusque. -->
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/archivo/v25/k3kQo8UDI-1M0wlSfdnoLmvDIaI.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zAjjH7Motmp5g.woff2">
 <link rel="stylesheet" href="assets/css/site.css?v={V_CSS}">
 </head>
 <body class="{classe}">
@@ -257,7 +280,7 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 <a class="saut-contenu" href="#contenu">Aller au contenu</a>
 
 <nav class="nav" aria-label="Navigation principale">
-  {f'<span class="nav__marque" aria-hidden="true" style="visibility:hidden">{e(I["nom"])}</span>' if classe == "page-accueil" else f'<a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true">→</span><span class="nav__marque-nom">{e(I["nom"])}</span><span class="visuellement-cache"> — retour à l\'accueil</span></a>'}
+  {f'<span class="nav__marque" aria-hidden="true" style="visibility:hidden">{e(I["nom"])}</span>' if classe == "page-accueil" else f'<a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span class="nav__marque-nom">{e(I["nom"])}</span><span class="visuellement-cache"> — retour à l\'accueil</span></a>'}
   <div class="nav__liens" id="menu-principal">{liens}</div>
   <a class="nav__contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>
   <button class="nav__bascule" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Menu"><span></span><span></span></button>
@@ -268,14 +291,10 @@ def coquille(titre_onglet, description, corps, actif=None, classe=""):
 </main>
 
 <footer class="pied monte">
-  <a class="pied__nom" href="index.html">{e(I['nom'])}
+  <a class="pied__retour" href="index.html" aria-label="Retour à l'accueil">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </a>
-  <p class="pied__coord">
-    <a href="mailto:{e(I['email'])}">{e(I['email'])}</a>
-    <a href="tel:{e(I['tel_lien'])}">{e(I['tel'])}</a>{('<a href="' + e(I['linkedin']) + '" target="_blank" rel="noopener">LinkedIn</a>') if I.get('linkedin') else ''}
-  </p>
-  <a class="pied__contact" href="contact.html"{' aria-current="page"' if actif == "contact" else ""}>Contact</a>
+  {'' if actif == "contact" else '<a class="pied__contact" href="contact.html">Contact</a>'}
 </footer>
 
 <div class="boite" role="dialog" aria-modal="true" aria-label="Visionneuse" aria-hidden="true">
@@ -333,7 +352,7 @@ def accueil():
         f'<a class="tuile" href="{page_de(r)}">'
         + '<span class="tuile__visuel">'
         + visuel_tuile(r)
-        + f'</span><span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span><span class="tuile__fleche" aria-hidden="true">↗</span></span></a>'
+        + f'</span><span class="tuile__corps"><span class="tuile__titre">{e(r["titre"])}</span>{fleche("tuile__fleche", 17)}</span></a>'
         for i, r in enumerate(C.RUBRIQUES))
 
     corps = f"""
@@ -381,8 +400,8 @@ def page_rubrique(r, i):
   {''.join(production_html(p, k) for k, p in enumerate(r['productions']))}
 
   <nav class="voisins cascade" aria-label="Rubriques voisines">
-    <a href="{page_de(prec)}"><span class="etq">Précédent</span> <strong>{e(prec['titre'])}</strong></a>
-    <a href="{page_de(suiv)}"><span class="etq">Suivant</span> <strong>{e(suiv['titre'])}</strong></a>
+    <a href="{page_de(prec)}"><span class="etq">Précédent</span> <strong><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M19 12H5M11 5l-7 7 7 7"/></svg> {e(prec['titre'])}</strong></a>
+    <a href="{page_de(suiv)}"><span class="etq">Suivant</span> <strong>{e(suiv['titre'])} <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg></strong></a>
   </nav>
 """
     desc = r["productions"][0].get("texte") or f"{r['titre']}, portfolio de {C.IDENTITE['nom']}."
@@ -394,7 +413,7 @@ def page_contact():
     I = C.IDENTITE
     corps = f"""
   <section class="bloc contact contact--page" aria-label="Contact">
-    <div class="dedans">
+    <div class="dedans contact__mise">
       <div class="fiche monte">
         <p class="fiche__nom">{e(I['nom'])}</p>
         <p class="fiche__role">{e(I['role'])}</p>
@@ -402,15 +421,26 @@ def page_contact():
           <a class="lien-contact" href="mailto:{e(I['email'])}">
             <span class="lien-contact__quoi">Écrire un mail</span>
             <span class="lien-contact__valeur">{e(I['email'])}</span>
-            <span class="lien-contact__fleche" aria-hidden="true">↗</span>
+            <span class="lien-contact__fleche">{fleche(taille=15)}</span>
           </a>
           <a class="lien-contact" href="tel:{e(I['tel_lien'])}">
             <span class="lien-contact__quoi">Appeler</span>
             <span class="lien-contact__valeur">{e(I['tel'])}</span>
-            <span class="lien-contact__fleche" aria-hidden="true">↗</span>
+            <span class="lien-contact__fleche">{fleche(taille=15)}</span>
           </a>
-          {('<a class="lien-contact" href="' + e(I['linkedin']) + '" target="_blank" rel="noopener"><span class="lien-contact__quoi">LinkedIn</span><span class="lien-contact__valeur">Voir le profil</span><span class="lien-contact__fleche" aria-hidden="true">↗</span></a>') if I.get('linkedin') else ''}
+          {('<a class="lien-contact" href="' + e(I['linkedin']) + '" target="_blank" rel="noopener"><span class="lien-contact__quoi">LinkedIn</span><span class="lien-contact__valeur">Voir le profil</span><span class="lien-contact__fleche">' + fleche(taille=15) + '</span></a>') if I.get('linkedin') else ''}
+          <a class="lien-contact" href="assets/docs/cv-lila-narinx.pdf" target="_blank" rel="noopener">
+            <span class="lien-contact__quoi">Télécharger</span>
+            <span class="lien-contact__valeur">CV</span>
+            <span class="lien-contact__fleche">{fleche(taille=15)}</span>
+          </a>
         </div>
+      </div>
+      <div class="contact__portrait monte">
+        <span class="contact__lueur" aria-hidden="true"></span>
+        <span class="contact__cadre">
+          {img_tag(C.PRESENTATION['portrait'], I['nom'], loading="eager", decoding="async")}
+        </span>
       </div>
     </div>
   </section>

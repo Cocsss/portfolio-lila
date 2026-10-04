@@ -19,14 +19,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=0161bce1">
+<!-- Les trois fichiers latin réellement utilisés au premier rendu (titres,
+     texte courant, accent italique). Sans ce préchargement, le navigateur
+     attend d'avoir lu et appliqué la feuille Google Fonts avant même de
+     COMMENCER à les télécharger : la police de secours s'affichait près
+     d'une seconde avant le changement, visible et brusque. -->
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/archivo/v25/k3kQo8UDI-1M0wlSfdnoLmvDIaI.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zAjjH7Motmp5g.woff2">
+<link rel="stylesheet" href="assets/css/site.css?v=6ce4c2e5">
 </head>
 <body class="page-contact">
 
 <a class="saut-contenu" href="#contenu">Aller au contenu</a>
 
 <nav class="nav" aria-label="Navigation principale">
-  <a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true">→</span><span class="nav__marque-nom">Lila Narinx</span><span class="visuellement-cache"> — retour à l'accueil</span></a>
+  <a class="nav__marque" href="index.html"><span class="nav__fleche" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span class="nav__marque-nom">Lila Narinx</span><span class="visuellement-cache"> — retour à l'accueil</span></a>
   <div class="nav__liens" id="menu-principal"><a class="nav__lien-accueil" href="index.html">Accueil</a><a href="campagne-360.html">Campagne 360°</a><a href="reseaux-sociaux.html">Réseaux sociaux</a><a href="sites-web.html">Sites web</a><a href="photo.html">Photo</a><a href="video.html">Vidéo</a><a href="redaction.html">Rédaction</a><a href="graphisme.html">Graphisme</a><a href="intelligence-artificielle.html">Intelligence artificielle</a><a class="nav__lien-contact" href="contact.html" aria-current="page">Contact</a></div>
   <a class="nav__contact" href="contact.html" aria-current="page">Contact</a>
   <button class="nav__bascule" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Menu"><span></span><span></span></button>
@@ -35,7 +46,7 @@
 <main id="contenu">
 
   <section class="bloc contact contact--page" aria-label="Contact">
-    <div class="dedans">
+    <div class="dedans contact__mise">
       <div class="fiche monte">
         <p class="fiche__nom">Lila Narinx</p>
         <p class="fiche__role">Social media, content creation, digital strategy</p>
@@ -43,15 +54,26 @@
           <a class="lien-contact" href="mailto:lila.narinx@gmail.com">
             <span class="lien-contact__quoi">Écrire un mail</span>
             <span class="lien-contact__valeur">lila.narinx@gmail.com</span>
-            <span class="lien-contact__fleche" aria-hidden="true">↗</span>
+            <span class="lien-contact__fleche"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
           </a>
           <a class="lien-contact" href="tel:+32471455177">
             <span class="lien-contact__quoi">Appeler</span>
             <span class="lien-contact__valeur">+32 471 45 51 77</span>
-            <span class="lien-contact__fleche" aria-hidden="true">↗</span>
+            <span class="lien-contact__fleche"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
           </a>
           
+          <a class="lien-contact" href="assets/docs/cv-lila-narinx.pdf" target="_blank" rel="noopener">
+            <span class="lien-contact__quoi">Télécharger</span>
+            <span class="lien-contact__valeur">CV</span>
+            <span class="lien-contact__fleche"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
         </div>
+      </div>
+      <div class="contact__portrait monte">
+        <span class="contact__lueur" aria-hidden="true"></span>
+        <span class="contact__cadre">
+          <img src="assets/img/portrait.webp" alt="Lila Narinx" width="537" height="730" loading="eager" decoding="async">
+        </span>
       </div>
     </div>
   </section>
@@ -59,14 +81,10 @@
 </main>
 
 <footer class="pied monte">
-  <a class="pied__nom" href="index.html">Lila Narinx
+  <a class="pied__retour" href="index.html" aria-label="Retour à l'accueil">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </a>
-  <p class="pied__coord">
-    <a href="mailto:lila.narinx@gmail.com">lila.narinx@gmail.com</a>
-    <a href="tel:+32471455177">+32 471 45 51 77</a>
-  </p>
-  <a class="pied__contact" href="contact.html" aria-current="page">Contact</a>
+  
 </footer>
 
 <div class="boite" role="dialog" aria-modal="true" aria-label="Visionneuse" aria-hidden="true">

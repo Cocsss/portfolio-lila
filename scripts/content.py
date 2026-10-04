@@ -226,7 +226,7 @@ RUBRIQUES = [
             {
                 "titre": "Contenu vidéo reportage sur l’artiste bruxellois « Spear », réalisé dans le cadre d’un cours de vidéo à l’IHECS",
                 "ressources": "Contenu « projet final SPEAR »",
-                "medias": vid("projet-spear:13"),
+                "medias": vid("projet-spear:14"),
                 "cols": 1,
             },
             {
