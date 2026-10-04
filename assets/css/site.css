@@ -192,14 +192,38 @@ a { color: inherit; }
 }
 .nav__liens { display: flex; gap: 1.4rem; }
 .nav__liens a {
+  position: relative;
   font-size: .7rem; font-weight: 500; letter-spacing: .12em;
   text-transform: uppercase; color: var(--blanc-70);
   text-decoration: none; white-space: nowrap;
-  padding: .3rem 0; border-bottom: 1px solid transparent;
-  transition: color .2s, border-color .2s;
+  padding: .3rem 0;
+  transition: color .2s;
 }
 .nav__liens a:hover { color: var(--blanc); }
-.nav__liens a[aria-current="page"] { color: var(--jaune); border-bottom-color: var(--jaune); }
+.nav__liens a[aria-current="page"] { color: var(--jaune); }
+/* Le trait de la rubrique courante. Il porte un nom de transition, donc
+   au changement de page le navigateur interpole sa position et sa
+   largeur entre l'ancienne et la nouvelle : il GLISSE jusqu'à la
+   nouvelle rubrique au lieu de disparaître ici et réapparaître là.
+   Un seul lien porte aria-current par page, le nom reste donc unique. */
+.nav__trait {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--jaune);
+  opacity: 0;
+}
+.nav__liens a[aria-current="page"] .nav__trait {
+  opacity: 1;
+  view-transition-name: nav-trait;
+}
+::view-transition-group(nav-trait) { animation-duration: 420ms; }
+::view-transition-old(nav-trait), ::view-transition-new(nav-trait) {
+  /* seul le déplacement du groupe compte : sans ça le trait se
+     fond en plus de glisser, et le fondu se voit sur 1 px de haut */
+  animation: none; mix-blend-mode: normal; height: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(nav-trait) { animation: none; }
+}
 .nav__contact {
   font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
   color: var(--vert); background: var(--jaune); text-decoration: none;
@@ -276,6 +300,10 @@ a { color: inherit; }
      jaune, du blanc à 60 % d'opacité devenait illisible au tap mobile
      (le survol reste « collé » tant qu'on ne touche pas ailleurs) */
   .nav__liens a:hover { color: var(--vert); opacity: .6; }
+  /* le menu mobile a son propre repère (pastille + filet épais) :
+     le trait glissant n'a rien à y faire, et du jaune sur le panneau
+     jaune serait de toute façon invisible */
+  .nav__trait { display: none; }
   .nav__liens a[aria-current="page"] {
     color: var(--vert);
     border-bottom: 3px solid var(--vert);

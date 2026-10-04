@@ -237,9 +237,13 @@ def production_html(p, i):
 def coquille(titre_onglet, description, corps, actif=None, classe=""):
     I = C.IDENTITE
     liens = f'<a class="nav__lien-accueil" href="index.html"{" aria-current=\"page\"" if classe == "page-accueil" else ""}>Accueil</a>'
+    # Le trait sous la rubrique courante est un élément à part : c'est LUI
+    # que la View Transitions API fait glisser d'une page à l'autre, sans
+    # emporter le texte du lien avec lui.
     liens += "".join(
         f'<a href="{page_de(r)}"' + (' aria-current="page"' if r["id"] == actif else "")
-        + f'>{e(r["titre"])}</a>' for r in C.RUBRIQUES)
+        + f'>{e(r["titre"])}<span class="nav__trait" aria-hidden="true"></span></a>'
+        for r in C.RUBRIQUES)
     liens += f'<a class="nav__lien-contact" href="contact.html"{" aria-current=\"page\"" if actif == "contact" else ""}>Contact</a>'
     return f"""<!doctype html>
 <html lang="fr">
