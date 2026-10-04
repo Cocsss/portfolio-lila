@@ -31,6 +31,31 @@
   descent-override: 22.02%;
   line-gap-override: 0%;
 }
+/* .condense resserre Archivo via son axe de largeur variable (wdth 78),
+   ce qu'aucune police statique ne sait faire : le secours normal était
+   18 % trop large et la phrase d'accroche passait sur plus de lignes,
+   puis se réorganisait à l'arrivée d'Archivo — 66 px de saut mesurés.
+   Mesuré sur les CAPITALES, .condense étant en majuscules. */
+@font-face {
+  font-family: "Archivo secours condense";
+  src: local("Helvetica Neue"), local("Helvetica"), local("Arial");
+  size-adjust: 84.93%;
+  ascent-override: 103.38%;
+  descent-override: 24.73%;
+  line-gap-override: 0%;
+}
+/* Georgia est 20 % plus large qu'Instrument Serif : l'accent italique
+   « la création » changeait de largeur à l'arrivée de la vraie police et
+   décalait les retours à la ligne de toute la phrase d'accroche — le
+   saut le plus visible sur téléphone, où elle tient sur 4 ou 5 lignes. */
+@font-face {
+  font-family: "Instrument secours";
+  src: local("Georgia"), local("Times New Roman"), local("Times");
+  size-adjust: 82.82%;
+  ascent-override: 119.54%;
+  descent-override: 37.43%;
+  line-gap-override: 0%;
+}
 
 :root {
   --vert:        #5b5617;   /* RVB 91 86 23 */                 /* le fond, partout */
@@ -43,7 +68,7 @@
   --trait:       rgba(246, 243, 234, .40);   /* .22 = 1,5:1, invisible */
 
   --display: "Archivo", "Archivo secours", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --serif:   "Instrument Serif", Georgia, "Times New Roman", serif;
+  --serif:   "Instrument Serif", "Instrument secours", Georgia, "Times New Roman", serif;
   --texte:   "Inter", "Inter secours", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* Barème de mouvement — on s'y tient partout */
@@ -105,7 +130,7 @@ a { color: inherit; }
   text-wrap: balance;
 }
 .condense {
-  font-family: var(--display);
+  font-family: "Archivo", "Archivo secours condense", Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-variation-settings: "wdth" 78;
   text-transform: uppercase;
