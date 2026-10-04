@@ -5,6 +5,33 @@
    petites étiquettes [ entre crochets ] dans les coins.
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ═══ POLICES DE SECOURS CALIBRÉES ════════════════════════════════
+   Le temps qu'Archivo et Inter arrivent, le texte s'affiche dans la
+   police système — qui n'occupe pas la même place. Au moment du
+   remplacement, tout se décalait : les grands titres « sautaient »,
+   très visible sur téléphone où ils font 23vw.
+   Les trois valeurs ci-dessous sont mesurées sur les vraies polices
+   (largeur moyenne des minuscules, ascendante, descendante) : le
+   secours occupe alors la même place au pixel près, et le passage à la
+   vraie police ne déplace plus rien.
+   ══════════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: "Archivo secours";
+  src: local("Helvetica Neue"), local("Helvetica"), local("Arial");
+  size-adjust: 106.26%;
+  ascent-override: 82.63%;
+  descent-override: 19.76%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Inter secours";
+  src: local("Helvetica Neue"), local("Helvetica"), local("Arial");
+  size-adjust: 109.56%;
+  ascent-override: 88.42%;
+  descent-override: 22.02%;
+  line-gap-override: 0%;
+}
+
 :root {
   --vert:        #5b5617;   /* RVB 91 86 23 */                 /* le fond, partout */
   --vert-nuit:   #403d10;                 /* nav, pied, voiles */
@@ -15,9 +42,9 @@
   --blanc-45:    rgba(246, 243, 234, .45);
   --trait:       rgba(246, 243, 234, .40);   /* .22 = 1,5:1, invisible */
 
-  --display: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --display: "Archivo", "Archivo secours", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --serif:   "Instrument Serif", Georgia, "Times New Roman", serif;
-  --texte:   "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --texte:   "Inter", "Inter secours", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* Barème de mouvement — on s'y tient partout */
   --t-vif:    160ms;   /* retour immédiat : couleur, opacité d'un badge */
@@ -374,7 +401,7 @@ a { color: inherit; }
 .contact__portrait { position: relative; aspect-ratio: 537 / 730; }
 .contact__cadre {
   position: relative; z-index: 1; display: block;
-  width: 100%; height: 100%; border-radius: 10px; overflow: hidden;
+  width: 100%; height: 100%; overflow: hidden;   /* coins droits */
 }
 .contact__cadre img { width: 100%; height: 100%; object-fit: cover; }
 .contact__lueur {
@@ -383,11 +410,19 @@ a { color: inherit; }
     radial-gradient(closest-side, rgb(238 236 131 / .6), transparent 70%) 18% 22% / 65% 65% no-repeat,
     radial-gradient(closest-side, rgb(246 243 234 / .3), transparent 70%) 82% 72% / 55% 55% no-repeat;
   filter: blur(40px);
-  animation: lueur-derive 16s ease-in-out infinite alternate;
+  /* « alternate » inversait la courbe au demi-tour : la dérive marquait
+     un temps d'arrêt puis repartait en sens inverse, ça se voyait.
+     Un cycle complet qui revient à son point de départ tourne en continu,
+     sans rupture. */
+  animation: lueur-derive 26s linear infinite;
+  will-change: transform;
 }
 @keyframes lueur-derive {
   0%   { transform: translate(0, 0) rotate(0deg); }
-  100% { transform: translate(4%, -5%) rotate(8deg); }
+  25%  { transform: translate(4%, -4%) rotate(3deg); }
+  50%  { transform: translate(1%, -7%) rotate(6deg); }
+  75%  { transform: translate(-3%, -3%) rotate(3deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 @media (prefers-reduced-motion: reduce) { .contact__lueur { animation: none; } }
 /* Sur ordinateur, « Accueil » et « Contact » font doublon : la marque en
